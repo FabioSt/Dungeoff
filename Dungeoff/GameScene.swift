@@ -25,7 +25,7 @@ class GameScene: SKScene {
     
     func checkPositions() {
         if heroNode.position == skeletonNode.position {
-                          attack()
+            attack(targetPosition: skeletonNode.position)
         } else if (heroNode.position == coin.position) {
                    coinCounter += 1
                     coin.removeFromParent()
@@ -106,8 +106,13 @@ class GameScene: SKScene {
 
     }
     
-    func attack() {
-            skeletonNode.position = rockMap.centerOfTile(atColumn: 17, row: 18)
+    func attack(targetPosition: CGPoint) {
+        let newPosition = CGPoint.init(x: (Int.random(in: -3...3)*Int(rockMap.tileSize.width)) + Int(targetPosition.x), y: (Int.random(in: -6...6) * Int(rockMap.tileSize.height)) + Int(targetPosition.y))
+        
+        let column = rockMap.tileColumnIndex(fromPosition: newPosition)
+        let row = rockMap.tileRowIndex(fromPosition: newPosition)
+        
+        skeletonNode.position = rockMap.centerOfTile(atColumn: column, row: row)
     }
     
     
