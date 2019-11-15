@@ -37,7 +37,7 @@ class GameScene: SKScene {
     override func update(_ currentTime: CFTimeInterval)
     {
         /* Called before each frame is rendered */
-        cameraNode.position = heroNode.position
+        camera!.position = heroNode.position
         checkPositions()
     }
     
@@ -173,10 +173,33 @@ class GameScene: SKScene {
         coinSpawn()
         skeletonSpawn()
 
-       
+       let pinchGesture = UIPinchGestureRecognizer(target: self, action: #selector(handlePinchFrom))
+              view.addGestureRecognizer(pinchGesture)
         
-        addChild(cameraNode)
-        camera = cameraNode
+    }
+    
+    @objc func handlePinchFrom(_ sender: UIPinchGestureRecognizer) {
+        let pinch = SKAction.scale(by: sender.scale, duration: 0.0)
+        camera!.run(pinch)
+        sender.scale = 1.0
+        print("x " , camera!.xScale)
+        print("y " , camera!.yScale)
+        
+        if (camera!.xScale > 4 ){
+            rockMap.alpha = 0
+            waterMap.alpha = 0
+            heroNode.alpha = 0
+            coin.alpha = 0
+            skeletonNode.alpha = 0
+            label.alpha = 0
+        }else if(camera!.xScale < 4){
+            rockMap.alpha = 1
+            waterMap.alpha = 1
+            heroNode.alpha = 1
+            coin.alpha = 1
+            label.alpha = 1
+            skeletonNode.alpha = 1
+        }
         
     }
 
