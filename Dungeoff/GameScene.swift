@@ -12,6 +12,7 @@ var rockMap : SKTileMapNode = SKTileMapNode()
 var waterMap : SKTileMapNode = SKTileMapNode()
 var currentRow = rockMap.numberOfColumns/2
 var currentColumn = rockMap.numberOfRows/2
+var moveVector = CGVector(dx: 0, dy: 0)
 
 var coinCounter:Int = 0
 
@@ -25,7 +26,8 @@ class GameScene: SKScene {
     
     func checkPositions() {
         if heroNode.position == skeletonNode.position {
-            attack(targetPosition: skeletonNode.position)
+//            attack(targetPosition: skeletonNode.position)
+            bump(node: heroNode, arrivingDirection: moveVector)
         } else if (heroNode.position == coin.position) {
                    coinCounter += 1
                     coin.removeFromParent()
@@ -39,6 +41,7 @@ class GameScene: SKScene {
         /* Called before each frame is rendered */
         camera!.position = heroNode.position
         checkPositions()
+        
     }
     
     func heroSpawn(){
@@ -115,6 +118,11 @@ class GameScene: SKScene {
         skeletonNode.position = rockMap.centerOfTile(atColumn: column, row: row)
     }
     
+    func bump(node: SKNode, arrivingDirection: CGVector) {
+        let bounceDestination = CGPoint(x: 0, y: -arrivingDirection.dy)
+        node.run(.move(to: bounceDestination, duration: 0.1))
+    }
+    
     
     func addSwipe() {
         let directions: [UISwipeGestureRecognizer.Direction] = [.right, .left, .up, .down]
@@ -129,29 +137,51 @@ class GameScene: SKScene {
         let direction = sender.direction
         switch direction {
             case .right:
+                let newPosition = CGPoint(x: heroNode.position.x + 128, y: heroNode.position.y)
+                if onLand(characterPosition: newPosition, map: rockMap) == false { return }
                 heroNode.position = rockMap.centerOfTile(atColumn: currentColumn + 1, row: currentRow)
 //                heroNode.run(.move(by: .init(dx: 64, dy: 0), duration: 0.2))
                 currentColumn += 1
+                moveVector = .init(dx: 64, dy: 0)
                 print("Gesture direction: Right")
                 print("\(currentColumn) , \(currentRow)")
             case .left:
+                let newPosition = CGPoint(x: heroNode.position.x - 128, y: heroNode.position.y)
+                if onLand(characterPosition: newPosition, map: rockMap) == false { return }
                 heroNode.position = rockMap.centerOfTile(atColumn: currentColumn - 1, row: currentRow)
                 currentColumn -= 1
+                moveVector = .init(dx: -64, dy: 0)
                 print("Gesture direction: Left")
                 print("\(currentColumn) , \(currentRow)")
             case .up:
+                let newPosition = CGPoint(x: heroNode.position.x, y: heroNode.position.y + 128)
+                if onLand(characterPosition: newPosition, map: rockMap) == false { return }
                 heroNode.position = rockMap.centerOfTile(atColumn: currentColumn, row: currentRow + 1)
                 currentRow += 1
+                moveVector = .init(dx: 0, dy: 64)
                 print("Gesture direction: Up")
             print("\(currentColumn) , \(currentRow)")
             case .down:
+                let newPosition = CGPoint(x: heroNode.position.x, y: heroNode.position.y - 128)
+                if onLand(characterPosition: newPosition, map: rockMap) == false { return }
                 heroNode.position = rockMap.centerOfTile(atColumn: currentColumn , row: currentRow - 1)
                 currentRow -= 1
+                moveVector = .init(dx: 0, dy: -64)
                 print("Gesture direction: Down")
             print("\(currentColumn) , \(currentRow)")
             default:
                 print("Unrecognized Gesture Direction")
         }
+    }
+    
+    func onLand(characterPosition: CGPoint, map: SKTileMapNode) -> Bool {
+        let column = map.tileColumnIndex(fromPosition: characterPosition)
+        let row = map.tileRowIndex(fromPosition: characterPosition)
+
+        if map.tileDefinition(atColumn: column, row: row)?.name != "Sand_Grid_Center" { return false }
+        else { return true }
+        
+//        map.tileDefinition(atColumn: column, row: row)
     }
     
     override func didMove(to view: SKView) {
