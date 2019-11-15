@@ -49,6 +49,8 @@ class GameScene: SKScene {
          let herof2 = SKTexture.init(imageNamed: "hero3")
          let herof3 = SKTexture.init(imageNamed: "hero4")
          let heroFrames: [SKTexture] = [herof0, herof1, herof2, herof3]
+        
+        
          herof0.filteringMode = .nearest
          herof1.filteringMode = .nearest
          herof2.filteringMode = .nearest
@@ -62,6 +64,8 @@ class GameScene: SKScene {
          // Change the frame per 0.2 sec
          let animation = SKAction.animate(with: heroFrames, timePerFrame: 0.2)
          heroNode.run(SKAction.repeatForever(animation))
+        
+        self.addChild(heroNode)
     }
     
     func skeletonSpawn(){
@@ -85,13 +89,20 @@ class GameScene: SKScene {
             // Change the frame per 0.2 sec
             let animation = SKAction.animate(with: skelFrames, timePerFrame: 0.2)
             skeletonNode.run(SKAction.repeatForever(animation))
-       }
+            self.addChild(skeletonNode)
+
+    
+    }
+    
+    
     
     func coinSpawn(){
         
          coin.position = rockMap.centerOfTile(atColumn: 12, row: 13)
          coin.size = CGSize(width: 32, height: 32)
          coin.texture?.filteringMode = .nearest
+         self.addChild(coin)
+
 
     }
     
@@ -150,10 +161,7 @@ class GameScene: SKScene {
             }
         }
         
-        print(rockMap)
-        print(rockMap.numberOfRows)
-        print(rockMap.numberOfColumns)
-        
+
         label.position = CGPoint(x: view.frame.width / 4, y: view.frame.height / 4)
         label.fontColor = SKColor.yellow
         label.fontSize = 45
@@ -165,9 +173,7 @@ class GameScene: SKScene {
         coinSpawn()
         skeletonSpawn()
 
-        self.addChild(coin)
-        self.addChild(heroNode)
-        self.addChild(skeletonNode)
+       
         
         addChild(cameraNode)
         camera = cameraNode
