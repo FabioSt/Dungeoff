@@ -37,7 +37,7 @@ class GameScene: SKScene {
     override func update(_ currentTime: CFTimeInterval)
     {
         /* Called before each frame is rendered */
-        cameraNode.position = heroNode.position
+        camera!.position = heroNode.position
         checkPositions()
     }
     
@@ -49,6 +49,8 @@ class GameScene: SKScene {
          let herof2 = SKTexture.init(imageNamed: "hero3")
          let herof3 = SKTexture.init(imageNamed: "hero4")
          let heroFrames: [SKTexture] = [herof0, herof1, herof2, herof3]
+        
+        
          herof0.filteringMode = .nearest
          herof1.filteringMode = .nearest
          herof2.filteringMode = .nearest
@@ -62,6 +64,8 @@ class GameScene: SKScene {
          // Change the frame per 0.2 sec
          let animation = SKAction.animate(with: heroFrames, timePerFrame: 0.2)
          heroNode.run(SKAction.repeatForever(animation))
+        
+        self.addChild(heroNode)
     }
     
     func skeletonSpawn(){
@@ -85,13 +89,20 @@ class GameScene: SKScene {
             // Change the frame per 0.2 sec
             let animation = SKAction.animate(with: skelFrames, timePerFrame: 0.2)
             skeletonNode.run(SKAction.repeatForever(animation))
-       }
+            self.addChild(skeletonNode)
+
+    
+    }
+    
+    
     
     func coinSpawn(){
         
          coin.position = rockMap.centerOfTile(atColumn: 12, row: 13)
          coin.size = CGSize(width: 32, height: 32)
          coin.texture?.filteringMode = .nearest
+         self.addChild(coin)
+
 
     }
     
@@ -150,10 +161,7 @@ class GameScene: SKScene {
             }
         }
         
-        print(rockMap)
-        print(rockMap.numberOfRows)
-        print(rockMap.numberOfColumns)
-        
+
         label.position = CGPoint(x: view.frame.width / 4, y: view.frame.height / 4)
         label.fontColor = SKColor.yellow
         label.fontSize = 45
@@ -165,12 +173,33 @@ class GameScene: SKScene {
         coinSpawn()
         skeletonSpawn()
 
-        self.addChild(coin)
-        self.addChild(heroNode)
-        self.addChild(skeletonNode)
+       let pinchGesture = UIPinchGestureRecognizer(target: self, action: #selector(handlePinchFrom))
+              view.addGestureRecognizer(pinchGesture)
         
-        addChild(cameraNode)
-        camera = cameraNode
+    }
+    
+    @objc func handlePinchFrom(_ sender: UIPinchGestureRecognizer) {
+        let pinch = SKAction.scale(by: sender.scale, duration: 0.0)
+        camera!.run(pinch)
+        sender.scale = 1.0
+        print("x " , camera!.xScale)
+        print("y " , camera!.yScale)
+        
+        if (camera!.xScale > 4 ){
+            rockMap.alpha = 0
+            waterMap.alpha = 0
+            heroNode.alpha = 0
+            coin.alpha = 0
+            skeletonNode.alpha = 0
+            label.alpha = 0
+        }else if(camera!.xScale < 4){
+            rockMap.alpha = 1
+            waterMap.alpha = 1
+            heroNode.alpha = 1
+            coin.alpha = 1
+            label.alpha = 1
+            skeletonNode.alpha = 1
+        }
         
     }
 
