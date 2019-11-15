@@ -7,6 +7,7 @@
 
 
 import SpriteKit
+import UIKit
 // this code is crazyyyyyyy
 var rockMap : SKTileMapNode = SKTileMapNode()
 var waterMap : SKTileMapNode = SKTileMapNode()
@@ -22,6 +23,8 @@ class GameScene: SKScene {
     let skeletonNode = SKSpriteNode(imageNamed: "skeleton1")
     let cameraNode = SKCameraNode()
     let coin = SKSpriteNode(imageNamed: "coin")
+    
+    let mapImage = UIImageView(frame: UIScreen.main.bounds)
     
     func checkPositions() {
         if heroNode.position == skeletonNode.position {
@@ -158,6 +161,10 @@ class GameScene: SKScene {
         
         addSwipe()
         
+        mapImage.image = UIImage(named: "map")
+        mapImage.contentMode = UIView.ContentMode.scaleAspectFill
+        view.insertSubview(mapImage, at: 0)
+        
         for node in self.children {
             if ( node.name == "rocks") {
                 rockMap = node as! SKTileMapNode
@@ -188,22 +195,14 @@ class GameScene: SKScene {
         camera!.run(pinch)
         sender.scale = 1.0
         print("x " , camera!.xScale)
-        print("y " , camera!.yScale)
         
         if (camera!.xScale > 4 ){
-            rockMap.alpha = 0
-            waterMap.alpha = 0
-            heroNode.alpha = 0
-            coin.alpha = 0
-            skeletonNode.alpha = 0
-            label.alpha = 0
-        }else if(camera!.xScale < 4){
-            rockMap.alpha = 1
-            waterMap.alpha = 1
-            heroNode.alpha = 1
-            coin.alpha = 1
-            label.alpha = 1
-            skeletonNode.alpha = 1
+            mapImage.alpha = 1
+        }else {mapImage.alpha = 0}
+            
+            if(camera!.xScale < 1){
+            
+            camera!.setScale(1.5)
         }
         
     }
