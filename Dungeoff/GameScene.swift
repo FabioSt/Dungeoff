@@ -7,7 +7,7 @@
 
 
 import SpriteKit
-
+// this code is crazyyyyyyy
 var rockMap : SKTileMapNode = SKTileMapNode()
 var waterMap : SKTileMapNode = SKTileMapNode()
 var currentRow = rockMap.numberOfColumns/2
