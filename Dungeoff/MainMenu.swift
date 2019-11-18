@@ -15,10 +15,13 @@ class MenuScene: SKScene {
     let tapStartLabel = SKLabelNode(fontNamed: "Helvetica")
     private var label : SKLabelNode?
     private var spinnyNode : SKShapeNode?
+    var background = SKSpriteNode(imageNamed: "bg")
     
     override func didMove(to view: SKView) {
         // set the background
-        backgroundColor = SKColor.white
+        background.position = CGPoint(x: frame.size.width / 2, y: frame.size.height / 2)
+        background.size = view.bounds.size
+        addChild(background)
 
         // set size, color, position and text of the tapStartLabel
         tapStartLabel.fontSize = 16
