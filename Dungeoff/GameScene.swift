@@ -23,7 +23,6 @@ var coinCounter:Int = 0
 class GameScene: SKScene {
     
     var label = SKLabelNode.init(text: "0")
-    let heroNode = SKSpriteNode(imageNamed: "hero1")
     let skeletonNode = SKSpriteNode(imageNamed: "skeleton1")
     var lifeBar = SKSpriteNode(texture: nil)
     let cameraNode = SKCameraNode()
