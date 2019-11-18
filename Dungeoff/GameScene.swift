@@ -136,11 +136,17 @@ class GameScene: SKScene {
     
     func coinSpawn(){
         
-        coinNode.position = CGPoint(x: 100, y: 100)
+        coinNode.position = CGPoint(x: -170, y: 370)
          coinNode.size = CGSize(width: 32, height: 32)
          coinNode.texture?.filteringMode = .nearest
         coinNode.zPosition = 1000
+
+       label.position = CGPoint(x: -130, y: 355)
+       label.fontColor = SKColor.white
+       label.fontSize = 45
+       label.fontName = "Helvetica"
        
+         camera!.addChild(label)
          camera!.addChild(coinNode)
 
     }
@@ -289,12 +295,6 @@ class GameScene: SKScene {
         }
         
 
-        label.position = CGPoint(x: view.frame.width / 4, y: view.frame.height / 4)
-        label.fontColor = SKColor.yellow
-        label.fontSize = 45
-        label.fontName = "Helvetica"
-        
-        addChild(label)
         
         heroSpawn()
         coinSpawn()
@@ -313,7 +313,7 @@ class GameScene: SKScene {
         sender.scale = 1.0
         print("x " , camera!.xScale)
         
-        if (camera!.xScale > 4 ){
+        if (camera!.xScale > 3 ){
             addMap()
             mapImage.alpha = 1
         }else {mapImage.alpha = 0}
