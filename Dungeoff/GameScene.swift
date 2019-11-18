@@ -27,7 +27,7 @@ class GameScene: SKScene {
     let mapImage = UIImageView(frame: UIScreen.main.bounds)
     
     func checkPositions() {
-        if heroNode.position == skeletonNode.position {
+        if comparePositionInt(position1: heroNode.position, position2: skeletonNode.position) {
 //            attack(targetPosition: skeletonNode.position)
             bump(node: heroNode, arrivingDirection: moveVector)
         } else if (heroNode.position == coin.position) {
@@ -87,7 +87,7 @@ class GameScene: SKScene {
             skelf3.filteringMode = .nearest
 
             // Load the first frame as initialization
-            skeletonNode.position = rockMap.centerOfTile(atColumn: 15, row: 16)
+            skeletonNode.position = rockMap.centerOfTile(atColumn: 12, row: 12)
             skeletonNode.size = CGSize(width: 64, height: 64)
             skeletonNode.texture?.filteringMode = .nearest
 
@@ -139,38 +139,48 @@ class GameScene: SKScene {
         let direction = sender.direction
         switch direction {
             case .right:
-                let newPosition = CGPoint(x: heroNode.position.x + 128, y: heroNode.position.y)
+                let newPosition = CGPoint(x: heroNode.position.x + 64, y: heroNode.position.y)
                 if onLand(characterPosition: newPosition, map: rockMap) == false { return }
-                heroNode.position = rockMap.centerOfTile(atColumn: currentColumn + 1, row: currentRow)
-//                heroNode.run(.move(by: .init(dx: 64, dy: 0), duration: 0.2))
+//                heroNode.position = rockMap.centerOfTile(atColumn: currentColumn + 1, row: currentRow)
+                heroNode.run(.move(by: .init(dx: 64, dy: 0), duration: 0.2))
                 currentColumn += 1
                 moveVector = .init(dx: 64, dy: 0)
                 print("Gesture direction: Right")
                 print("\(currentColumn) , \(currentRow)")
+                print(heroNode.position)
             case .left:
-                let newPosition = CGPoint(x: heroNode.position.x - 128, y: heroNode.position.y)
+                let newPosition = CGPoint(x: heroNode.position.x - 64, y: heroNode.position.y)
                 if onLand(characterPosition: newPosition, map: rockMap) == false { return }
-                heroNode.position = rockMap.centerOfTile(atColumn: currentColumn - 1, row: currentRow)
+                heroNode.run(.move(by: .init(dx: -64, dy: 0), duration: 0.2))
+//                heroNode.position = rockMap.centerOfTile(atColumn: currentColumn - 1, row: currentRow)
                 currentColumn -= 1
                 moveVector = .init(dx: -64, dy: 0)
                 print("Gesture direction: Left")
                 print("\(currentColumn) , \(currentRow)")
+            print(heroNode.position)
+
             case .up:
-                let newPosition = CGPoint(x: heroNode.position.x, y: heroNode.position.y + 128)
+                let newPosition = CGPoint(x: heroNode.position.x, y: heroNode.position.y + 64)
                 if onLand(characterPosition: newPosition, map: rockMap) == false { return }
-                heroNode.position = rockMap.centerOfTile(atColumn: currentColumn, row: currentRow + 1)
+                heroNode.run(.move(by: .init(dx: 0, dy: 64), duration: 0.2))
+//                heroNode.position = rockMap.centerOfTile(atColumn: currentColumn, row: currentRow + 1)
                 currentRow += 1
                 moveVector = .init(dx: 0, dy: 64)
                 print("Gesture direction: Up")
             print("\(currentColumn) , \(currentRow)")
+            print(heroNode.position)
+
             case .down:
-                let newPosition = CGPoint(x: heroNode.position.x, y: heroNode.position.y - 128)
+                let newPosition = CGPoint(x: heroNode.position.x, y: heroNode.position.y - 64)
                 if onLand(characterPosition: newPosition, map: rockMap) == false { return }
-                heroNode.position = rockMap.centerOfTile(atColumn: currentColumn , row: currentRow - 1)
+                heroNode.run(.move(by: .init(dx: 0, dy: -64), duration: 0.2))
+//                heroNode.position = rockMap.centerOfTile(atColumn: currentColumn , row: currentRow - 1)
                 currentRow -= 1
                 moveVector = .init(dx: 0, dy: -64)
                 print("Gesture direction: Down")
             print("\(currentColumn) , \(currentRow)")
+            print(heroNode.position)
+            
             default:
                 print("Unrecognized Gesture Direction")
         }
@@ -184,6 +194,15 @@ class GameScene: SKScene {
         else { return true }
         
 //        map.tileDefinition(atColumn: column, row: row)
+    }
+    
+    func comparePositionInt(position1: CGPoint, position2: CGPoint) -> Bool {
+        if Int(position1.x) == Int(position2.x) && Int(position1.y) == Int(position2.y) {
+            return true
+        }
+        else {
+            return false
+        }
     }
     
     override func didMove(to view: SKView) {
