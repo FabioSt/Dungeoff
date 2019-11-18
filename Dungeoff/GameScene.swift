@@ -229,7 +229,7 @@ class GameScene: SKScene {
         let column = map.tileColumnIndex(fromPosition: characterPosition)
         let row = map.tileRowIndex(fromPosition: characterPosition)
 
-        if map.tileDefinition(atColumn: column, row: row)?.name != "Sand_Grid_Center" { return false }
+        if map.tileDefinition(atColumn: column, row: row)?.name != "C3" { return false }
         else { return true }
         
 //        map.tileDefinition(atColumn: column, row: row)
@@ -261,6 +261,7 @@ class GameScene: SKScene {
                 for tileDefinition in tileRule.tileDefinitions {
                     for texture in tileDefinition.textures {
                         texture.filteringMode = .nearest
+                        tileDefinition.size = rockMap.tileSize
                     }
                 }
             }
