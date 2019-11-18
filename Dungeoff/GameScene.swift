@@ -11,21 +11,23 @@ import SpriteKit
 var rockMap : SKTileMapNode = SKTileMapNode()
 var waterMap : SKTileMapNode = SKTileMapNode()
 var currentRow = rockMap.numberOfColumns/2
-var currentColumn = rockMap.numberOfRows/2
+var currentColumn = rockMap.numberOfRows/2 + 1
 var moveVector = CGVector(dx: 0, dy: 0)
 
+let skeletonHP = CGFloat(6)
+var hitCounter = CGFloat(0)
+
 var coinCounter:Int = 0
-
-let tileSet = rockMap.tileSet
-
 
 class GameScene: SKScene {
     
     var label = SKLabelNode.init(text: "0")
+    let heroNode = SKSpriteNode(imageNamed: "hero1")
     let skeletonNode = SKSpriteNode(imageNamed: "skeleton1")
+    var lifeBar = SKSpriteNode(texture: nil)
     let cameraNode = SKCameraNode()
     let coinNode = SKSpriteNode(imageNamed: "coin")
-    let heroNode: char = char.init()
+    
     let mapImage = UIImageView(frame: UIScreen.main.bounds)
     
     
@@ -33,6 +35,7 @@ class GameScene: SKScene {
         if comparePositionRound(position1: heroNode.position, position2: skeletonNode.position) {
             //            attack(targetPosition: skeletonNode.position)
             bump(node: heroNode, arrivingDirection: moveVector)
+            checkHP()
             print("move Vector is \(moveVector)")
         } else if comparePositionRound(position1: heroNode.position, position2: coinNode.position) {
             if coinNode.parent != nil {
@@ -49,7 +52,27 @@ class GameScene: SKScene {
         /* Called before each frame is rendered */
         camera!.position = heroNode.position
         checkPositions()
-        
+        label.text = "\(coinCounter)"
+        if lifeBar.size.width == .zero {
+        lifeBar.removeFromParent()
+            skeletonNode.run(.fadeAlpha(to: 0, duration: 0.8))
+        }
+    }
+    
+    func checkHP(){
+        if lifeBar.size.width == .zero {
+            lifeBar.removeFromParent()
+            skeletonNode.run(.fadeAlpha(to: 0, duration: 1))
+            coinCounter += 100
+//            skeletonNode.removeFromParent()
+            return
+        }
+        hitCounter += 1
+        let newSize = CGSize(width: skeletonNode.size.width - skeletonNode.size.width * hitCounter/skeletonHP, height: skeletonNode.size.height/5)
+        print("\(hitCounter) / \(skeletonHP)")
+//        lifeBar.size = newSize
+        print("\(hitCounter/skeletonHP)")
+        lifeBar.run(.resize(toWidth: newSize.width, duration: 0.5))
     }
     
     func heroSpawn(){
@@ -80,28 +103,35 @@ class GameScene: SKScene {
     }
     
     func skeletonSpawn(){
-
-            // 4 skel frames
-            let skelf0 = SKTexture.init(imageNamed: "skeleton1")
-            let skelf1 = SKTexture.init(imageNamed: "skeleton2")
-            let skelf2 = SKTexture.init(imageNamed: "skeleton3")
-            let skelf3 = SKTexture.init(imageNamed: "skeleton4")
-            let skelFrames: [SKTexture] = [skelf0, skelf1, skelf2, skelf3]
-            skelf0.filteringMode = .nearest
-            skelf1.filteringMode = .nearest
-            skelf2.filteringMode = .nearest
-            skelf3.filteringMode = .nearest
-
-            // Load the first frame as initialization
-            skeletonNode.position = rockMap.centerOfTile(atColumn: 12, row: 12)
-            skeletonNode.size = CGSize(width: 64, height: 64)
-            skeletonNode.texture?.filteringMode = .nearest
-
-            // Change the frame per 0.2 sec
-            let animation = SKAction.animate(with: skelFrames, timePerFrame: 0.2)
-            skeletonNode.run(SKAction.repeatForever(animation))
-            self.addChild(skeletonNode)
-
+        
+        // 4 skel frames
+        let skelf0 = SKTexture.init(imageNamed: "skeleton1")
+        let skelf1 = SKTexture.init(imageNamed: "skeleton2")
+        let skelf2 = SKTexture.init(imageNamed: "skeleton3")
+        let skelf3 = SKTexture.init(imageNamed: "skeleton4")
+        let skelFrames: [SKTexture] = [skelf0, skelf1, skelf2, skelf3]
+        skelf0.filteringMode = .nearest
+        skelf1.filteringMode = .nearest
+        skelf2.filteringMode = .nearest
+        skelf3.filteringMode = .nearest
+        
+        // Load the first frame as initialization
+        skeletonNode.position = rockMap.centerOfTile(atColumn: 12, row: 12)
+        skeletonNode.size = CGSize(width: 64, height: 64)
+        skeletonNode.texture?.filteringMode = .nearest
+        
+        let barSize = CGSize(width: skeletonNode.size.width, height: skeletonNode.size.height/5)
+        lifeBar = SKSpriteNode(color: #colorLiteral(red: 0.5843137503, green: 0.8235294223, blue: 0.4196078479, alpha: 1), size: barSize)
+        
+        let lifeBarPosition = CGPoint(x: skeletonNode.position.x, y: skeletonNode.position.y + skeletonNode.size.height)
+        lifeBar.position = lifeBarPosition
+        self.addChild(lifeBar)
+        
+        // Change the frame per 0.2 sec
+        let animation = SKAction.animate(with: skelFrames, timePerFrame: 0.2)
+        skeletonNode.run(SKAction.repeatForever(animation))
+        self.addChild(skeletonNode)
+        
     }
     
     func coinSpawn(){
@@ -110,7 +140,6 @@ class GameScene: SKScene {
          coinNode.size = CGSize(width: 32, height: 32)
          coinNode.texture?.filteringMode = .nearest
          self.addChild(coinNode)
-
     }
     
     func attack(targetPosition: CGPoint) {
@@ -220,18 +249,7 @@ class GameScene: SKScene {
     override func didMove(to view: SKView) {
         
         addSwipe()
-        camera!.setScale(1)
-        
-        // Function for apply PixelArt shit to the tiles
-        for tileGroup in tileSet.tileGroups {
-            for tileRule in tileGroup.rules {
-                for tileDefinition in tileRule.tileDefinitions {
-                    for texture in tileDefinition.textures {
-                        texture.filteringMode = .nearest
-                    }
-                }
-            }
-        }
+        camera!.setScale(1.2)
         
         for node in self.children {
             if ( node.name == "rocks") {
@@ -252,6 +270,8 @@ class GameScene: SKScene {
         heroSpawn()
         coinSpawn()
         skeletonSpawn()
+        
+        
 
        let pinchGesture = UIPinchGestureRecognizer(target: self, action: #selector(handlePinchFrom))
               view.addGestureRecognizer(pinchGesture)
@@ -271,7 +291,7 @@ class GameScene: SKScene {
             
             if(camera!.xScale < 1){
             
-                camera!.setScale(1.1)
+            camera!.setScale(1.5)
         }
         
     }
