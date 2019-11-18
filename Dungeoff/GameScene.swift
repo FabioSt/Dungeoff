@@ -22,13 +22,10 @@ let tileSet = rockMap.tileSet
 class GameScene: SKScene {
     
     var label = SKLabelNode.init(text: "0")
-//    let heroNode = SKSpriteNode(imageNamed: "hero1")
-    
     let skeletonNode = SKSpriteNode(imageNamed: "skeleton1")
     let cameraNode = SKCameraNode()
-    let coin = SKSpriteNode(imageNamed: "coin")
+    let coinNode = SKSpriteNode(imageNamed: "coin")
     let heroNode: char = char.init()
-    let hero:char = char.init()
     let mapImage = UIImageView(frame: UIScreen.main.bounds)
     
     
