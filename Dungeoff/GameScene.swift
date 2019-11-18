@@ -272,7 +272,7 @@ class GameScene: SKScene {
             
             if(camera!.xScale < 1){
             
-            camera!.setScale(1.5)
+                camera!.setScale(1.1)
         }
         
     }
