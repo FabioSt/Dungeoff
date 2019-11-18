@@ -19,6 +19,7 @@
 		1DD579D42371D34D002BDA4C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1DD579D22371D34D002BDA4C /* Assets.xcassets */; };
 		1DD579D62372ED54002BDA4C /* Map.sks in Resources */ = {isa = PBXBuildFile; fileRef = 1DD579D52372ED54002BDA4C /* Map.sks */; };
 		4EE07D0F237F0C9D00027046 /* MyActions.sks in Resources */ = {isa = PBXBuildFile; fileRef = 4EE07D0E237F0C9D00027046 /* MyActions.sks */; };
+		E7D309C92382DB6F00FA070A /* char.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7D309C82382DB6F00FA070A /* char.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -36,6 +37,7 @@
 		1DD579D22371D34D002BDA4C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		1DD579D52372ED54002BDA4C /* Map.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = Map.sks; sourceTree = "<group>"; };
 		4EE07D0E237F0C9D00027046 /* MyActions.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = MyActions.sks; sourceTree = "<group>"; };
+		E7D309C82382DB6F00FA070A /* char.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = char.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -52,6 +54,7 @@
 		1DD579AB2371BB10002BDA4C = {
 			isa = PBXGroup;
 			children = (
+				E7D309C82382DB6F00FA070A /* char.swift */,
 				1DD579D12371D34D002BDA4C /* TileSet.sks */,
 				1DD579D22371D34D002BDA4C /* Assets.xcassets */,
 				1DD579B62371BB10002BDA4C /* Dungeoff */,
