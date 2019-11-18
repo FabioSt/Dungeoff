@@ -40,6 +40,7 @@ class MenuScene: SKScene {
         let gameScene = GameScene(fileNamed: "Map")
         
         gameScene?.scaleMode = SKSceneScaleMode.aspectFill
+        gameScene?.size = (view?.frame.size)!
 
         // use a transition to the gameScene
         let reveal = SKTransition.flipVertical(withDuration: 1.5)

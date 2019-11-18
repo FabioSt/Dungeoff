@@ -136,10 +136,13 @@ class GameScene: SKScene {
     
     func coinSpawn(){
         
-         coinNode.position = rockMap.centerOfTile(atColumn: 12, row: 13)
+        coinNode.position = CGPoint(x: 100, y: 100)
          coinNode.size = CGSize(width: 32, height: 32)
          coinNode.texture?.filteringMode = .nearest
-         self.addChild(coinNode)
+        coinNode.zPosition = 1000
+       
+         camera!.addChild(coinNode)
+
     }
     
     func attack(targetPosition: CGPoint) {
@@ -250,6 +253,17 @@ class GameScene: SKScene {
         
         addSwipe()
         camera!.setScale(1.2)
+        
+        // Function for apply PixelArt shit to the tiles
+        for tileGroup in tileSet.tileGroups {
+            for tileRule in tileGroup.rules {
+                for tileDefinition in tileRule.tileDefinitions {
+                    for texture in tileDefinition.textures {
+                        texture.filteringMode = .nearest
+                    }
+                }
+            }
+        }
         
         for node in self.children {
             if ( node.name == "rocks") {
