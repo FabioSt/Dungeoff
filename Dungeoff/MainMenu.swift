@@ -42,7 +42,7 @@ class MenuScene: SKScene {
         gameScene?.scaleMode = SKSceneScaleMode.aspectFill
 
         // use a transition to the gameScene
-        let reveal = SKTransition.doorsOpenVertical(withDuration: 1)
+        let reveal = SKTransition.flipVertical(withDuration: 1.5)
 
         // transition from current scene to the new scene
         view!.presentScene(gameScene!, transition: reveal)
