@@ -28,9 +28,10 @@ class GameScene: SKScene {
     
     
     func checkPositions() {
-        if comparePositionInt(position1: heroNode.position, position2: skeletonNode.position) {
+        if comparePositionRound(position1: heroNode.position, position2: skeletonNode.position) {
 //            attack(targetPosition: skeletonNode.position)
             bump(node: heroNode, arrivingDirection: moveVector)
+            print("move Vector is \(moveVector)")
         } else if (heroNode.position == coin.position) {
                    coinCounter += 1
                     coin.removeFromParent()
@@ -196,8 +197,8 @@ class GameScene: SKScene {
 //        map.tileDefinition(atColumn: column, row: row)
     }
     
-    func comparePositionInt(position1: CGPoint, position2: CGPoint) -> Bool {
-        if Int(position1.x) == Int(position2.x) && Int(position1.y) == Int(position2.y) {
+    func comparePositionRound(position1: CGPoint, position2: CGPoint) -> Bool {
+        if position1.x.rounded() == position2.x.rounded() && position1.y.rounded() == position2.y.rounded() {
             return true
         }
         else {
