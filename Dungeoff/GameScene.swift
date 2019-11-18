@@ -16,6 +16,7 @@ var moveVector = CGVector(dx: 0, dy: 0)
 
 let skeletonHP = CGFloat(6)
 var hitCounter = CGFloat(0)
+let tileSet = rockMap.tileSet
 
 var coinCounter:Int = 0
 
