@@ -26,6 +26,7 @@ class GameScene: SKScene {
     
     let mapImage = UIImageView(frame: UIScreen.main.bounds)
     
+    
     func checkPositions() {
         if comparePositionInt(position1: heroNode.position, position2: skeletonNode.position) {
 //            attack(targetPosition: skeletonNode.position)
@@ -96,10 +97,7 @@ class GameScene: SKScene {
             skeletonNode.run(SKAction.repeatForever(animation))
             self.addChild(skeletonNode)
 
-    
     }
-    
-    
     
     func coinSpawn(){
         
@@ -107,7 +105,6 @@ class GameScene: SKScene {
          coin.size = CGSize(width: 32, height: 32)
          coin.texture?.filteringMode = .nearest
          self.addChild(coin)
-
 
     }
     
@@ -143,6 +140,7 @@ class GameScene: SKScene {
                 if onLand(characterPosition: newPosition, map: rockMap) == false { return }
 //                heroNode.position = rockMap.centerOfTile(atColumn: currentColumn + 1, row: currentRow)
                 heroNode.run(.move(by: .init(dx: 64, dy: 0), duration: 0.2))
+                heroNode.xScale = 1.0;
                 currentColumn += 1
                 moveVector = .init(dx: 64, dy: 0)
                 print("Gesture direction: Right")
@@ -152,6 +150,7 @@ class GameScene: SKScene {
                 let newPosition = CGPoint(x: heroNode.position.x - 64, y: heroNode.position.y)
                 if onLand(characterPosition: newPosition, map: rockMap) == false { return }
                 heroNode.run(.move(by: .init(dx: -64, dy: 0), duration: 0.2))
+                heroNode.xScale = -1.0;
 //                heroNode.position = rockMap.centerOfTile(atColumn: currentColumn - 1, row: currentRow)
                 currentColumn -= 1
                 moveVector = .init(dx: -64, dy: 0)
@@ -163,6 +162,7 @@ class GameScene: SKScene {
                 let newPosition = CGPoint(x: heroNode.position.x, y: heroNode.position.y + 64)
                 if onLand(characterPosition: newPosition, map: rockMap) == false { return }
                 heroNode.run(.move(by: .init(dx: 0, dy: 64), duration: 0.2))
+//                heroNode.zRotation = 3.14 / 2
 //                heroNode.position = rockMap.centerOfTile(atColumn: currentColumn, row: currentRow + 1)
                 currentRow += 1
                 moveVector = .init(dx: 0, dy: 64)
@@ -205,13 +205,16 @@ class GameScene: SKScene {
         }
     }
     
+    func addMap() {
+        mapImage.image = UIImage(named: "map")
+        mapImage.contentMode = UIView.ContentMode.scaleAspectFill
+        self.view?.insertSubview(mapImage, at: 0)
+    }
+    
     override func didMove(to view: SKView) {
         
         addSwipe()
-        
-        mapImage.image = UIImage(named: "map")
-        mapImage.contentMode = UIView.ContentMode.scaleAspectFill
-        view.insertSubview(mapImage, at: 0)
+        camera!.setScale(1.2)
         
         for node in self.children {
             if ( node.name == "rocks") {
@@ -245,6 +248,7 @@ class GameScene: SKScene {
         print("x " , camera!.xScale)
         
         if (camera!.xScale > 4 ){
+            addMap()
             mapImage.alpha = 1
         }else {mapImage.alpha = 0}
             
