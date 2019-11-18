@@ -16,6 +16,9 @@ var moveVector = CGVector(dx: 0, dy: 0)
 
 var coinCounter:Int = 0
 
+let tileSet = rockMap.tileSet
+
+
 class GameScene: SKScene {
     
     var label = SKLabelNode.init(text: "0")
@@ -218,7 +221,18 @@ class GameScene: SKScene {
     override func didMove(to view: SKView) {
         
         addSwipe()
-        camera!.setScale(1.2)
+        camera!.setScale(1)
+        
+        // Function for apply PixelArt shit to the tiles
+        for tileGroup in tileSet.tileGroups {
+            for tileRule in tileGroup.rules {
+                for tileDefinition in tileRule.tileDefinitions {
+                    for texture in tileDefinition.textures {
+                        texture.filteringMode = .nearest
+                    }
+                }
+            }
+        }
         
         for node in self.children {
             if ( node.name == "rocks") {
