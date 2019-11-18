@@ -23,12 +23,11 @@ var coinCounter:Int = 0
 class GameScene: SKScene {
     
     var label = SKLabelNode.init(text: "0")
-    let heroNode = SKSpriteNode(imageNamed: "hero1")
     let skeletonNode = SKSpriteNode(imageNamed: "skeleton1")
     var lifeBar = SKSpriteNode(texture: nil)
     let cameraNode = SKCameraNode()
     let coinNode = SKSpriteNode(imageNamed: "coin")
-    
+    let heroNode: classePersonaggio = classePersonaggio.init()
     let mapImage = UIImageView(frame: UIScreen.main.bounds)
     
     
@@ -159,7 +158,15 @@ class GameScene: SKScene {
         let bounceDestination = CGPoint(x: -arrivingDirection.dx, y: -arrivingDirection.dy)
 //        node.run(.move(to: bounceDestination, duration: 0.1))
         node.run(.moveBy(x: bounceDestination.x, y: bounceDestination.y, duration: 0.1))
+        heroNode.vita -= 1
+        heroNode.die()
+        print(heroNode.vita)
+        if (heroNode.died == true){
+            gameOver()
+            scene?.view?.isPaused = true
+        }
     }
+    
     
     
     func addSwipe() {
@@ -247,6 +254,12 @@ class GameScene: SKScene {
     func addMap() {
         mapImage.image = UIImage(named: "map")
         mapImage.contentMode = UIView.ContentMode.scaleAspectFill
+        self.view?.insertSubview(mapImage, at: 0)
+    }
+    
+    func gameOver() {
+        mapImage.image = UIImage(named: "gameOver")
+        mapImage.contentMode = UIView.ContentMode.scaleAspectFit
         self.view?.insertSubview(mapImage, at: 0)
     }
     
