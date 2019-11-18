@@ -22,22 +22,24 @@ class GameScene: SKScene {
     let heroNode = SKSpriteNode(imageNamed: "hero1")
     let skeletonNode = SKSpriteNode(imageNamed: "skeleton1")
     let cameraNode = SKCameraNode()
-    let coin = SKSpriteNode(imageNamed: "coin")
+    let coinNode = SKSpriteNode(imageNamed: "coin")
     
     let mapImage = UIImageView(frame: UIScreen.main.bounds)
     
     
     func checkPositions() {
         if comparePositionRound(position1: heroNode.position, position2: skeletonNode.position) {
-//            attack(targetPosition: skeletonNode.position)
+            //            attack(targetPosition: skeletonNode.position)
             bump(node: heroNode, arrivingDirection: moveVector)
             print("move Vector is \(moveVector)")
-        } else if (heroNode.position == coin.position) {
-                   coinCounter += 1
-                    coin.removeFromParent()
-                    print(coinCounter)
-                    label.text = "\(coinCounter)"
-               }
+        } else if comparePositionRound(position1: heroNode.position, position2: coinNode.position) {
+            if coinNode.parent != nil {
+                coinCounter += 1
+                coinNode.removeFromParent()
+                print(coinCounter)
+                label.text = "\(coinCounter)"
+            }
+        }
     }
     
     override func update(_ currentTime: CFTimeInterval)
@@ -102,10 +104,10 @@ class GameScene: SKScene {
     
     func coinSpawn(){
         
-         coin.position = rockMap.centerOfTile(atColumn: 12, row: 13)
-         coin.size = CGSize(width: 32, height: 32)
-         coin.texture?.filteringMode = .nearest
-         self.addChild(coin)
+         coinNode.position = rockMap.centerOfTile(atColumn: 12, row: 13)
+         coinNode.size = CGSize(width: 32, height: 32)
+         coinNode.texture?.filteringMode = .nearest
+         self.addChild(coinNode)
 
     }
     
@@ -119,8 +121,9 @@ class GameScene: SKScene {
     }
     
     func bump(node: SKNode, arrivingDirection: CGVector) {
-        let bounceDestination = CGPoint(x: 0, y: -arrivingDirection.dy)
-        node.run(.move(to: bounceDestination, duration: 0.1))
+        let bounceDestination = CGPoint(x: -arrivingDirection.dx, y: -arrivingDirection.dy)
+//        node.run(.move(to: bounceDestination, duration: 0.1))
+        node.run(.moveBy(x: bounceDestination.x, y: bounceDestination.y, duration: 0.1))
     }
     
     
