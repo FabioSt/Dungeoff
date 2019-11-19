@@ -29,7 +29,7 @@ class GameScene: SKScene {
     var lifeBar = SKSpriteNode(texture: nil)
     let cameraNode = SKCameraNode()
     let coinNode = SKSpriteNode(imageNamed: "coin")
-    let heroNode: classePersonaggio = classePersonaggio.init()
+    let heroNode: Character = Character.init()
     let mapImage = UIImageView(frame: UIScreen.main.bounds)
     
     let walkableTiles = ["B2", "B3", "A2"]
@@ -184,11 +184,11 @@ class GameScene: SKScene {
     }
     
     func heartsDown() {
-        if (heroNode.vita == 3) {
+        if (heroNode.health == 3) {
             heartContainers.texture = SKTexture(imageNamed: "3of3")
-        } else if (heroNode.vita == 2) {
+        } else if (heroNode.health == 2) {
             heartContainers.texture = SKTexture(imageNamed: "2of3")
-        } else if (heroNode.vita == 1) {
+        } else if (heroNode.health == 1) {
             heartContainers.texture = SKTexture(imageNamed: "1of3")
         }
     }
@@ -200,10 +200,10 @@ class GameScene: SKScene {
         let bounceDestination = CGPoint(x: -arrivingDirection.dx, y: -arrivingDirection.dy)
 //        node.run(.move(to: bounceDestination, duration: 0.1))
         node.run(.moveBy(x: bounceDestination.x, y: bounceDestination.y, duration: 0.1))
-        heroNode.vita -= 1
+        heroNode.health -= 1
         heartsDown()
         heroNode.die()
-        print(heroNode.vita)
+        print(heroNode.health)
         if (heroNode.died == true){
             gameOver()
             scene?.view?.isPaused = true

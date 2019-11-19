@@ -9,16 +9,16 @@
 import UIKit
 import SpriteKit
 
-class classePersonaggio: SKSpriteNode {
+class Character: SKSpriteNode {
 //        init() {
             
-            let eroe = SKSpriteNode(imageNamed: "hero-idle1")
-            var vita: Int = 3
+            let hero = SKSpriteNode(imageNamed: "hero-idle1")
+            var health: Int = 3
             var died = false
 //        }
     
     func die(){
-        if (vita == 0){
+        if (health == 0){
             print("you died")
             died = true
         }
