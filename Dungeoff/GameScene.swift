@@ -24,7 +24,7 @@ var coinCounter:Int = 0
 
 class GameScene: SKScene {
     
-    var label = SKLabelNode(fontNamed: "DOCK11 Heavy")
+    var label = SKLabelNode(fontNamed: "Savior4")
     let skeletonNode = SKSpriteNode(imageNamed: "skeleton1")
     var lifeBar = SKSpriteNode(texture: nil)
     let cameraNode = SKCameraNode()
@@ -158,10 +158,10 @@ class GameScene: SKScene {
          coinNode.texture?.filteringMode = .nearest
         coinNode.zPosition = 1000
 
-       label.position = CGPoint(x: -145, y: 355)
+       label.position = CGPoint(x: -145, y: 357)
         label.horizontalAlignmentMode = .left
        label.fontColor = SKColor.white
-       label.fontSize = 45
+       label.fontSize = 55
        
          camera!.addChild(label)
          camera!.addChild(coinNode)
@@ -298,9 +298,13 @@ class GameScene: SKScene {
     }
     
     func gameOver() {
+        removeAllChildren()
+        removeAllActions()
         mapImage.image = UIImage(named: "gameOver")
         mapImage.contentMode = UIView.ContentMode.scaleAspectFit
         self.view?.insertSubview(mapImage, at: 0)
+        
+        
     }
     
    

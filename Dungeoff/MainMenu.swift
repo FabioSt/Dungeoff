@@ -14,7 +14,7 @@ class MenuScene: SKScene {
     var backgroundMusic: SKAudioNode!
     
     // you can use another font for the label if you want...
-    let tapStartLabel = SKLabelNode(fontNamed: "Helvetica")
+    let tapStartLabel = SKLabelNode(fontNamed: "Savior4")
     private var label : SKLabelNode?
     private var spinnyNode : SKShapeNode?
     var background = SKSpriteNode(imageNamed: "bg")
@@ -35,7 +35,7 @@ class MenuScene: SKScene {
         addChild(background)
 
         // set size, color, position and text of the tapStartLabel
-        tapStartLabel.fontSize = 20
+        tapStartLabel.fontSize = 32
         tapStartLabel.fontColor = SKColor.white
         tapStartLabel.horizontalAlignmentMode = .center
         tapStartLabel.verticalAlignmentMode = .center
