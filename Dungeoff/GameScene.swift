@@ -8,20 +8,24 @@
 import AVFoundation
 import SpriteKit
 
+// Grid Stuff
 var rockMap : SKTileMapNode = SKTileMapNode()
 var waterMap : SKTileMapNode = SKTileMapNode()
 var currentRow = rockMap.numberOfColumns/2
 var currentColumn = rockMap.numberOfRows/2 + 1
 var moveVector = CGVector(dx: 0, dy: 0)
+let tileSet = rockMap.tileSet
 
+// Tutorial Stuff
+var hintLabel: SKLabelNode = SKLabelNode()
 let hints: Array<String> = ["Shake to earn some coin", "Great, you can buy a torch!", "Swipe to Move", "Great"]
+var tutorialCounter :Int = 0
 
 let skeletonHP = CGFloat(6)
 var hitCounter = CGFloat(0)
-let tileSet = rockMap.tileSet
 
 var heartContainers = SKSpriteNode(imageNamed: "3of3")
-var cont = 0
+var cont = 0 // counter for BUMP action
 var coinCounter:Int = 0
 
 class GameScene: SKScene {
@@ -60,15 +64,20 @@ class GameScene: SKScene {
         label.text = "\(coinCounter)"
         if lifeBar.size.width == .zero {
         lifeBar.removeFromParent()
-            skeletonNode.run(.fadeAlpha(to: 0, duration: 0.8))
+            skeletonNode.run(.fadeAlpha(to: 0, duration: 0.3))
+        }
+        
+        if tutorialCounter == 4 {
+            hintLabel.text = hints[3]
         }
     }
     
     func checkHP(){
         if lifeBar.size.width == .zero {
+            coinCounter += 100
             lifeBar.removeFromParent()
             skeletonNode.run(.fadeAlpha(to: 0, duration: 1))
-            coinCounter += 100
+            skeletonNode.position = rockMap.centerOfTile(atColumn: 0, row: 0)
 //            skeletonNode.removeFromParent()
             return
         }
@@ -77,7 +86,7 @@ class GameScene: SKScene {
         print("\(hitCounter) / \(skeletonHP)")
 //        lifeBar.size = newSize
         print("\(hitCounter/skeletonHP)")
-        lifeBar.run(.resize(toWidth: newSize.width, duration: 0.5))
+        lifeBar.run(.resize(toWidth: newSize.width, duration: 0.4))
     }
     
     func heroRun() {
@@ -97,7 +106,6 @@ class GameScene: SKScene {
     }
     
     func tutorial() {
-        var hintLabel: SKLabelNode = SKLabelNode()
         
         hintLabel.fontSize = 30
         hintLabel.fontName = "Savior4"
@@ -105,8 +113,10 @@ class GameScene: SKScene {
         hintLabel.horizontalAlignmentMode = .center
         hintLabel.verticalAlignmentMode = .center
         hintLabel.position = CGPoint(x: 0, y: -350)
-        hintLabel.text = hints[1]
+        hintLabel.text = hints[2]
         camera!.addChild(hintLabel)
+        
+        
     }
     
     func heroRunUp() {
@@ -169,7 +179,7 @@ class GameScene: SKScene {
         let barSize = CGSize(width: skeletonNode.size.width, height: skeletonNode.size.height/5)
         lifeBar = SKSpriteNode(color: #colorLiteral(red: 0.5843137503, green: 0.8235294223, blue: 0.4196078479, alpha: 1), size: barSize)
         
-        let lifeBarPosition = CGPoint(x: skeletonNode.position.x, y: skeletonNode.position.y + skeletonNode.size.height)
+        var lifeBarPosition = CGPoint(x: skeletonNode.position.x, y: skeletonNode.position.y + skeletonNode.size.height)
         lifeBar.position = lifeBarPosition
         self.addChild(lifeBar)
         
@@ -177,6 +187,11 @@ class GameScene: SKScene {
         let animation = SKAction.animate(with: skelFrames, timePerFrame: 0.2)
         skeletonNode.run(SKAction.repeatForever(animation))
         self.addChild(skeletonNode)
+        
+        let move1 = SKAction.move(to: (rockMap.centerOfTile(atColumn: 13, row: 13)), duration: 0.2)
+        let move2 = SKAction.move(to: (rockMap.centerOfTile(atColumn: 14, row: 13)), duration: 0.2)
+        let waitAction = SKAction.wait(forDuration: 1.5)
+        skeletonNode.run(SKAction.repeatForever(SKAction.sequence([move1,waitAction,move2,waitAction])))
         
     }
     
@@ -266,6 +281,7 @@ class GameScene: SKScene {
                 heroNode.run(.move(by: .init(dx: 64, dy: 0), duration: 0.2))
                 heroNode.xScale = 1.0;
                 currentColumn += 1
+                tutorialCounter+=1
                 moveVector = .init(dx: 64, dy: 0)
                 print("Gesture direction: Right")
                 print("\(currentColumn) , \(currentRow)")
@@ -278,6 +294,7 @@ class GameScene: SKScene {
                 heroNode.run(.move(by: .init(dx: -64, dy: 0), duration: 0.2))
                 heroNode.xScale = -1.0;
                 currentColumn -= 1
+                tutorialCounter+=1
                 moveVector = .init(dx: -64, dy: 0)
                 print("Gesture direction: Left")
                 print("\(currentColumn) , \(currentRow)")
@@ -292,6 +309,7 @@ class GameScene: SKScene {
 //                heroNode.zRotation = 3.14 / 2
 //                heroNode.position = rockMap.centerOfTile(atColumn: currentColumn, row: currentRow + 1)
                 currentRow += 1
+                tutorialCounter+=1
                 moveVector = .init(dx: 0, dy: 64)
                 print("Gesture direction: Up")
             print("\(currentColumn) , \(currentRow)")
@@ -304,6 +322,7 @@ class GameScene: SKScene {
                 dashSound()
 //                heroNode.position = rockMap.centerOfTile(atColumn: currentColumn , row: currentRow - 1)
                 currentRow -= 1
+                tutorialCounter+=1
                 moveVector = .init(dx: 0, dy: -64)
                 print("Gesture direction: Down")
             print("\(currentColumn) , \(currentRow)")
