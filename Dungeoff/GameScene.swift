@@ -14,6 +14,8 @@ var currentRow = rockMap.numberOfColumns/2
 var currentColumn = rockMap.numberOfRows/2 + 1
 var moveVector = CGVector(dx: 0, dy: 0)
 
+let hints: Array<String> = ["Shake to earn some coin", "Great, you can buy a torch!", "Swipe to Move", "Great"]
+
 let skeletonHP = CGFloat(6)
 var hitCounter = CGFloat(0)
 let tileSet = rockMap.tileSet
@@ -92,6 +94,19 @@ class GameScene: SKScene {
          // Change the frame per 0.2 sec
          let animation = SKAction.animate(with: heroFrames, timePerFrame: 0.08)
         heroNode.run(SKAction.repeat(animation, count: 1))
+    }
+    
+    func tutorial() {
+        var hintLabel: SKLabelNode = SKLabelNode()
+        
+        hintLabel.fontSize = 30
+        hintLabel.fontName = "Savior4"
+        hintLabel.fontColor = SKColor.white
+        hintLabel.horizontalAlignmentMode = .center
+        hintLabel.verticalAlignmentMode = .center
+        hintLabel.position = CGPoint(x: 0, y: -350)
+        hintLabel.text = hints[1]
+        camera!.addChild(hintLabel)
     }
     
     func heroRunUp() {
@@ -308,7 +323,6 @@ class GameScene: SKScene {
         
         
 
-//        map.tileDefinition(atColumn: column, row: row)
     }
     
     func comparePositionRound(position1: CGPoint, position2: CGPoint) -> Bool {
@@ -340,7 +354,7 @@ class GameScene: SKScene {
     
     override func didMove(to view: SKView) {
         
-        menuMusic(father: self)
+//        menuMusic(father: self)
         
         backgroundColor = SKColor.init(red: 0.1647, green: 0.0745, blue: 0.1961, alpha: 1.0)
         addSwipe()
@@ -372,7 +386,7 @@ class GameScene: SKScene {
         coinSpawn()
         skeletonSpawn()
         hearts()
-        
+        tutorial()
 
        let pinchGesture = UIPinchGestureRecognizer(target: self, action: #selector(handlePinchFrom))
               view.addGestureRecognizer(pinchGesture)
