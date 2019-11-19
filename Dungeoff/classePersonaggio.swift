@@ -11,7 +11,8 @@ import SpriteKit
 
 class classePersonaggio: SKSpriteNode {
 //        init() {
-            let eroe = SKSpriteNode(imageNamed: "hero1")
+            
+            let eroe = SKSpriteNode(imageNamed: "hero-idle1")
             var vita: Int = 3
             var died = false
 //        }

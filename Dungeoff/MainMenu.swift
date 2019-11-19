@@ -11,6 +11,8 @@ import SpriteKit
 
 class MenuScene: SKScene {
     
+    var backgroundMusic: SKAudioNode!
+    
     // you can use another font for the label if you want...
     let tapStartLabel = SKLabelNode(fontNamed: "Helvetica")
     private var label : SKLabelNode?
@@ -18,21 +20,31 @@ class MenuScene: SKScene {
     var background = SKSpriteNode(imageNamed: "bg")
     
     override func didMove(to view: SKView) {
+        
+        let fadeOut = SKAction.fadeAlpha(to: 0, duration: 0.6)
+        let fadeIn = SKAction.fadeAlpha(to: 1, duration: 0.6)
+                
+        
+        if let musicURL = Bundle.main.url(forResource: "opening", withExtension: "mp3") {
+            backgroundMusic = SKAudioNode(url: musicURL)
+            addChild(backgroundMusic)
+        }
         // set the background
         background.position = CGPoint(x: frame.size.width / 2, y: frame.size.height / 2)
         background.size = view.bounds.size
         addChild(background)
 
         // set size, color, position and text of the tapStartLabel
-        tapStartLabel.fontSize = 16
-        tapStartLabel.fontColor = SKColor.black
+        tapStartLabel.fontSize = 20
+        tapStartLabel.fontColor = SKColor.white
         tapStartLabel.horizontalAlignmentMode = .center
         tapStartLabel.verticalAlignmentMode = .center
         tapStartLabel.position = CGPoint(
             x: size.width / 2,
             y: size.height / 2
         )
-        tapStartLabel.text = "Tap to start the game"
+        tapStartLabel.text = "Tap to Start"
+        tapStartLabel.run(SKAction.repeatForever(SKAction.sequence([fadeOut,fadeIn])))
 
         // add the label to the scene
         addChild(tapStartLabel)
@@ -46,7 +58,7 @@ class MenuScene: SKScene {
         gameScene?.size = (view?.frame.size)!
 
         // use a transition to the gameScene
-        let reveal = SKTransition.flipVertical(withDuration: 1.5)
+        let reveal = SKTransition.push(with: .up, duration: 1.4)
 
         // transition from current scene to the new scene
         view!.presentScene(gameScene!, transition: reveal)
