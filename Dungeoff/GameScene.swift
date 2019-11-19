@@ -19,7 +19,7 @@ var hitCounter = CGFloat(0)
 let tileSet = rockMap.tileSet
 
 var heartContainers = SKSpriteNode(imageNamed: "3of3")
-
+var cont = 0
 var coinCounter:Int = 0
 
 class GameScene: SKScene {
@@ -194,6 +194,9 @@ class GameScene: SKScene {
     }
     
     func bump(node: SKNode, arrivingDirection: CGVector) {
+        cont += 1
+        if(cont != 2)
+        {
         let bounceDestination = CGPoint(x: -arrivingDirection.dx, y: -arrivingDirection.dy)
 //        node.run(.move(to: bounceDestination, duration: 0.1))
         node.run(.moveBy(x: bounceDestination.x, y: bounceDestination.y, duration: 0.1))
@@ -204,6 +207,9 @@ class GameScene: SKScene {
         if (heroNode.died == true){
             gameOver()
             scene?.view?.isPaused = true
+        }
+        }else{
+            cont = 0
         }
     }
     
@@ -280,9 +286,11 @@ class GameScene: SKScene {
         let column = map.tileColumnIndex(fromPosition: characterPosition)
         let row = map.tileRowIndex(fromPosition: characterPosition)
         
-        if map.tileDefinition(atColumn: column, row: row)?.name != walkableTiles[0] { return false }
+        if map.tileDefinition(atColumn: column, row: row)?.name != walkableTiles[0] && map.tileDefinition(atColumn: column, row: row)?.name != walkableTiles[1]   { return false }
         else { return true }
         
+        
+
 //        map.tileDefinition(atColumn: column, row: row)
     }
     
@@ -304,6 +312,7 @@ class GameScene: SKScene {
     func gameOver() {
         removeAllChildren()
         removeAllActions()
+        
         mapImage.image = UIImage(named: "gameOver")
         mapImage.contentMode = UIView.ContentMode.scaleAspectFit
         self.view?.insertSubview(mapImage, at: 0)
