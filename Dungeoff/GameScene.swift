@@ -141,12 +141,10 @@ class GameScene: SKScene {
         let skelf0 = SKTexture.init(imageNamed: "skeleton1")
         let skelf1 = SKTexture.init(imageNamed: "skeleton2")
         let skelf2 = SKTexture.init(imageNamed: "skeleton3")
-        let skelf3 = SKTexture.init(imageNamed: "skeleton4")
-        let skelFrames: [SKTexture] = [skelf0, skelf1, skelf2, skelf3]
+        let skelFrames: [SKTexture] = [skelf0, skelf1, skelf2]
         skelf0.filteringMode = .nearest
         skelf1.filteringMode = .nearest
         skelf2.filteringMode = .nearest
-        skelf3.filteringMode = .nearest
         
         // Load the first frame as initialization
         skeletonNode.position = rockMap.centerOfTile(atColumn: 14, row: 13)
@@ -341,6 +339,14 @@ class GameScene: SKScene {
    
     
     override func didMove(to view: SKView) {
+        
+        // BG MUSIC
+//        var backgroundMusic: SKAudioNode!
+//        if let musicURL = Bundle.main.url(forResource: "opening", withExtension: "mp3") {
+//            backgroundMusic = SKAudioNode(url: musicURL)
+//            addChild(backgroundMusic)
+//        }
+//
         
         backgroundColor = SKColor.init(red: 0.1647, green: 0.0745, blue: 0.1961, alpha: 1.0)
         addSwipe()
