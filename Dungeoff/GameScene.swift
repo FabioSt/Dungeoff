@@ -135,6 +135,22 @@ class GameScene: SKScene {
         heroNode.run(SKAction.repeat(animation, count: 1))
     }
     
+    func heroRunDown() {
+        // hero frames
+         let herof0 = SKTexture.init(imageNamed: "hero-run1-down")
+         let herof1 = SKTexture.init(imageNamed: "hero-run2-down")
+         let herof2 = SKTexture.init(imageNamed: "hero-run3-down")
+         let heroFrames: [SKTexture] = [herof0, herof1, herof2]
+        
+         herof0.filteringMode = .nearest
+         herof1.filteringMode = .nearest
+         herof2.filteringMode = .nearest
+
+         // Change the frame per 0.2 sec
+         let animation = SKAction.animate(with: heroFrames, timePerFrame: 0.08)
+        heroNode.run(SKAction.repeat(animation, count: 1))
+    }
+    
     func heroSpawn(){
         
          // hero frames
@@ -319,6 +335,7 @@ class GameScene: SKScene {
                 let newPosition = CGPoint(x: heroNode.position.x, y: heroNode.position.y - 64)
                 if onLand(characterPosition: newPosition, map: rockMap) == false { return }
                 heroNode.run(.move(by: .init(dx: 0, dy: -64), duration: 0.2))
+                heroRunDown()
                 dashSound()
 //                heroNode.position = rockMap.centerOfTile(atColumn: currentColumn , row: currentRow - 1)
                 currentRow -= 1
