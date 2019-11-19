@@ -5,9 +5,9 @@
 //  Created by Fabio Staiano on 05/11/2019.
 //  Copyright © 2019 Fabio Staiano. All rights reserved.
 
-
+import AVFoundation
 import SpriteKit
-// this code is crazyyyyyyy
+
 var rockMap : SKTileMapNode = SKTileMapNode()
 var waterMap : SKTileMapNode = SKTileMapNode()
 var currentRow = rockMap.numberOfColumns/2
@@ -207,7 +207,7 @@ class GameScene: SKScene {
         }
     }
     
-    
+   
     
     func addSwipe() {
         let directions: [UISwipeGestureRecognizer.Direction] = [.right, .left, .up, .down]
@@ -225,6 +225,7 @@ class GameScene: SKScene {
                 let newPosition = CGPoint(x: heroNode.position.x + 64, y: heroNode.position.y)
                 if onLand(characterPosition: newPosition, map: rockMap) == false { return }
                 heroRun()
+                dashSound()
                 heroNode.run(.move(by: .init(dx: 64, dy: 0), duration: 0.2))
                 heroNode.xScale = 1.0;
                 currentColumn += 1
@@ -236,6 +237,7 @@ class GameScene: SKScene {
                 let newPosition = CGPoint(x: heroNode.position.x - 64, y: heroNode.position.y)
                 if onLand(characterPosition: newPosition, map: rockMap) == false { return }
                 heroRun()
+                dashSound()
                 heroNode.run(.move(by: .init(dx: -64, dy: 0), duration: 0.2))
                 heroNode.xScale = -1.0;
                 currentColumn -= 1
@@ -248,6 +250,7 @@ class GameScene: SKScene {
                 let newPosition = CGPoint(x: heroNode.position.x, y: heroNode.position.y + 64)
                 if onLand(characterPosition: newPosition, map: rockMap) == false { return }
                 heroNode.run(.move(by: .init(dx: 0, dy: 64), duration: 0.2))
+                dashSound()
 //                heroNode.zRotation = 3.14 / 2
 //                heroNode.position = rockMap.centerOfTile(atColumn: currentColumn, row: currentRow + 1)
                 currentRow += 1
@@ -260,6 +263,7 @@ class GameScene: SKScene {
                 let newPosition = CGPoint(x: heroNode.position.x, y: heroNode.position.y - 64)
                 if onLand(characterPosition: newPosition, map: rockMap) == false { return }
                 heroNode.run(.move(by: .init(dx: 0, dy: -64), duration: 0.2))
+                dashSound()
 //                heroNode.position = rockMap.centerOfTile(atColumn: currentColumn , row: currentRow - 1)
                 currentRow -= 1
                 moveVector = .init(dx: 0, dy: -64)
@@ -303,7 +307,6 @@ class GameScene: SKScene {
         mapImage.image = UIImage(named: "gameOver")
         mapImage.contentMode = UIView.ContentMode.scaleAspectFit
         self.view?.insertSubview(mapImage, at: 0)
-        
         
     }
     

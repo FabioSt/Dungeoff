@@ -6,7 +6,19 @@
 //  Copyright © 2019 Fabio Staiano. All rights reserved.
 //
 
-import Foundation
+import AVFoundation
 import SpriteKit
 
 
+// Dash - Sound Effect
+func dashSound() {
+var audioPlayer = AVAudioPlayer()
+let soundURL = Bundle.main.url(forResource: "dash", withExtension: "wav")
+do {
+    audioPlayer = try AVAudioPlayer(contentsOf: soundURL!)
+}
+catch {
+    print(error)
+}
+audioPlayer.play()
+}

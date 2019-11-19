@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		1DA0F4102383EBA600CA451D /* Savior4.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 1DA0F40F2383EBA600CA451D /* Savior4.ttf */; };
+		1DA0F4122383F19C00CA451D /* dash.wav in Resources */ = {isa = PBXBuildFile; fileRef = 1DA0F4112383F19C00CA451D /* dash.wav */; };
 		1DB6D7F32382D76300D13996 /* Functions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DB6D7F22382D76200D13996 /* Functions.swift */; };
 		1DB6D7F52382D93800D13996 /* MainMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DB6D7F42382D93800D13996 /* MainMenu.swift */; };
 		1DB972A02383444C00CB6A31 /* opening.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 1DB9729F2383444C00CB6A31 /* opening.mp3 */; };
@@ -26,6 +27,7 @@
 
 /* Begin PBXFileReference section */
 		1DA0F40F2383EBA600CA451D /* Savior4.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Savior4.ttf; sourceTree = "<group>"; };
+		1DA0F4112383F19C00CA451D /* dash.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = dash.wav; sourceTree = "<group>"; };
 		1DB6D7F22382D76200D13996 /* Functions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Functions.swift; sourceTree = "<group>"; };
 		1DB6D7F42382D93800D13996 /* MainMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainMenu.swift; sourceTree = "<group>"; };
 		1DB9729F2383444C00CB6A31 /* opening.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = opening.mp3; sourceTree = "<group>"; };
@@ -55,12 +57,13 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		1DB9729E2383443B00CB6A31 /* Music */ = {
+		1DB9729E2383443B00CB6A31 /* Music+Sounds */ = {
 			isa = PBXGroup;
 			children = (
+				1DA0F4112383F19C00CA451D /* dash.wav */,
 				1DB9729F2383444C00CB6A31 /* opening.mp3 */,
 			);
-			path = Music;
+			path = "Music+Sounds";
 			sourceTree = "<group>";
 		};
 		1DD579AB2371BB10002BDA4C = {
@@ -84,7 +87,7 @@
 		1DD579B62371BB10002BDA4C /* Dungeoff */ = {
 			isa = PBXGroup;
 			children = (
-				1DB9729E2383443B00CB6A31 /* Music */,
+				1DB9729E2383443B00CB6A31 /* Music+Sounds */,
 				1DD579B72371BB11002BDA4C /* AppDelegate.swift */,
 				1DD579BD2371BB11002BDA4C /* GameScene.swift */,
 				E7D309CB2382E53F00FA070A /* classePersonaggio.swift */,
@@ -163,6 +166,7 @@
 				1DD579D62372ED54002BDA4C /* Map.sks in Resources */,
 				1DB972A02383444C00CB6A31 /* opening.mp3 in Resources */,
 				1DD579D32371D34D002BDA4C /* TileSet.sks in Resources */,
+				1DA0F4122383F19C00CA451D /* dash.wav in Resources */,
 				4EE07D0F237F0C9D00027046 /* MyActions.sks in Resources */,
 				1DD579C32371BB11002BDA4C /* Main.storyboard in Resources */,
 				1DD579C52371BB13002BDA4C /* Assets.xcassets in Resources */,
