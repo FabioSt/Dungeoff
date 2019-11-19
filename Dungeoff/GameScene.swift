@@ -168,6 +168,7 @@ class GameScene: SKScene {
 
     }
     
+    
     func hearts() {
             heartContainers.size = CGSize(width: 118, height: 30)
            heartContainers.position = CGPoint(x: -134, y: 325)
@@ -202,6 +203,7 @@ class GameScene: SKScene {
         node.run(.moveBy(x: bounceDestination.x, y: bounceDestination.y, duration: 0.1))
         heroNode.health -= 1
         heartsDown()
+        hitSound()
         heroNode.die()
         print(heroNode.health)
         if (heroNode.died == true){
