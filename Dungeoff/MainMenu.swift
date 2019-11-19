@@ -10,9 +10,7 @@ import Foundation
 import SpriteKit
 
 class MenuScene: SKScene {
-    
-    var backgroundMusic: SKAudioNode!
-    
+        
     // you can use another font for the label if you want...
     let tapStartLabel = SKLabelNode(fontNamed: "Savior4")
     private var label : SKLabelNode?
@@ -25,10 +23,8 @@ class MenuScene: SKScene {
         let fadeIn = SKAction.fadeAlpha(to: 1, duration: 0.6)
                 
         
-        if let musicURL = Bundle.main.url(forResource: "opening", withExtension: "mp3") {
-            backgroundMusic = SKAudioNode(url: musicURL)
-            addChild(backgroundMusic)
-        }
+        menuMusic(father: self)
+        
         // set the background
         background.position = CGPoint(x: frame.size.width / 2, y: frame.size.height / 2)
         background.size = view.bounds.size

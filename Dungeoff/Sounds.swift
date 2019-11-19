@@ -24,3 +24,11 @@ func hitSound() {
            AudioServicesPlaySystemSound(mySound);
        }
    }
+
+func menuMusic(father: SKNode) {
+    var backgroundMusic: SKAudioNode!
+            if let musicURL = Bundle.main.url(forResource: "opening", withExtension: "mp3") {
+                backgroundMusic = SKAudioNode(url: musicURL)
+                father.addChild(backgroundMusic)
+            }
+}

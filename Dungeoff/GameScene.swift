@@ -340,13 +340,7 @@ class GameScene: SKScene {
     
     override func didMove(to view: SKView) {
         
-        // BG MUSIC
-//        var backgroundMusic: SKAudioNode!
-//        if let musicURL = Bundle.main.url(forResource: "opening", withExtension: "mp3") {
-//            backgroundMusic = SKAudioNode(url: musicURL)
-//            addChild(backgroundMusic)
-//        }
-//
+        menuMusic(father: self)
         
         backgroundColor = SKColor.init(red: 0.1647, green: 0.0745, blue: 0.1961, alpha: 1.0)
         addSwipe()
