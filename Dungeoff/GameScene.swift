@@ -33,10 +33,10 @@ class GameScene: SKScene {
     var label = SKLabelNode(fontNamed: "Savior4")
     let skeletonNode = SKSpriteNode(imageNamed: "skeleton1")
     var lifeBar = SKSpriteNode(texture: nil)
-    let cameraNode = SKCameraNode()
     let coinNode = SKSpriteNode(imageNamed: "coin")
     let heroNode: Character = Character.init()
     let mapImage = UIImageView(frame: UIScreen.main.bounds)
+    let overImage = SKSpriteNode(imageNamed: "gameOver")
         
     let walkableTiles = ["B2", "B3", "A2"]
     
@@ -64,7 +64,7 @@ class GameScene: SKScene {
         lifeBar.position = lifeBarPosition
         
         
-        camera!.position = heroNode.position
+        camera?.position = heroNode.position
         checkPositions()
         label.text = "\(coinCounter)"
         if lifeBar.size.width == .zero {
@@ -90,6 +90,14 @@ class GameScene: SKScene {
                 checkHP()
                 slashSound()
             }
+        }
+        if node === self.overImage {
+            let restart = GameScene(fileNamed: "Map")
+            restart?.scaleMode = SKSceneScaleMode.aspectFit
+            restart?.size = (view?.frame.size)!
+            view?.presentScene(restart!)
+            heroNode.position = rockMap.centerOfTile(atColumn: rockMap.numberOfRows/2 , row: rockMap.numberOfColumns/2)
+//            heroSpawn()
         }
     }
     
@@ -305,10 +313,10 @@ class GameScene: SKScene {
         hitSound()
         heroNode.die()
         print(heroNode.health)
-        if (heroNode.died == true){
-            gameOver()
-            scene?.view?.isPaused = true
-        }
+            if (heroNode.died == true){
+                scene?.view?.isPaused = true
+                gameOver()
+            }
         }else{
             cont = 0
         }
@@ -429,10 +437,9 @@ class GameScene: SKScene {
         removeAllChildren()
         removeAllActions()
         
-        mapImage.image = UIImage(named: "gameOver")
-        mapImage.contentMode = UIView.ContentMode.scaleAspectFit
-        self.view?.insertSubview(mapImage, at: 0)
-        
+        overImage.size = CGSize(width: 320, height: 320)
+        addChild(overImage)
+        view?.scene?.isPaused = false
     }
     
    
@@ -475,15 +482,13 @@ class GameScene: SKScene {
 //        darkRoom()
 
        let pinchGesture = UIPinchGestureRecognizer(target: self, action: #selector(handlePinchFrom))
-              view.addGestureRecognizer(pinchGesture)
-        
+            view.addGestureRecognizer(pinchGesture)
     }
     
     @objc func handlePinchFrom(_ sender: UIPinchGestureRecognizer) {
         let pinch = SKAction.scale(by: sender.scale, duration: 0.0)
         camera!.run(pinch)
         sender.scale = 1.0
-        print("x " , camera!.xScale)
         
         if (camera!.xScale > 3 ){
             addMap()
@@ -493,9 +498,7 @@ class GameScene: SKScene {
             if(camera!.xScale < 1){
             
             camera!.setScale(1.5)
-        }
-        
+            }
     }
-
 }
 
