@@ -39,7 +39,7 @@ class GameScene: SKScene {
     let mapImage = UIImageView(frame: UIScreen.main.bounds)
     let overImage = SKSpriteNode(imageNamed: "gameOver")
         
-    let walkableTiles = ["B2", "B3", "A2"]
+    let walkableTiles = ["A1", "A2", "A3", "B1", "B2", "B3","C1","C2","C3"]
     
     func checkPositions() {
         if comparePositionRound(position1: heroNode.position, position2: skeletonNode.position) {
@@ -337,7 +337,7 @@ class GameScene: SKScene {
         switch direction {
             case .right:
                 let newPosition = CGPoint(x: heroNode.position.x + 64, y: heroNode.position.y)
-                if onLand(characterPosition: newPosition, map: rockMap) == false { return }
+               if (onLand(characterPosition: newPosition, map: rockMap) == false){return}
                 heroRun()
                 dashSound()
                 heroNode.run(.move(by: .init(dx: 64, dy: 0), duration: 0.2))
@@ -350,7 +350,7 @@ class GameScene: SKScene {
                 print(heroNode.position)
             case .left:
                 let newPosition = CGPoint(x: heroNode.position.x - 64, y: heroNode.position.y)
-                if onLand(characterPosition: newPosition, map: rockMap) == false { return }
+                if (onLand(characterPosition: newPosition, map: rockMap) == false){return}
                 heroRun()
                 dashSound()
                 heroNode.run(.move(by: .init(dx: -64, dy: 0), duration: 0.2))
@@ -364,7 +364,7 @@ class GameScene: SKScene {
 
             case .up:
                 let newPosition = CGPoint(x: heroNode.position.x, y: heroNode.position.y + 64)
-                if onLand(characterPosition: newPosition, map: rockMap) == false { return }
+                if (onLand(characterPosition: newPosition, map: rockMap) == false){return}
                 heroRunUp()
                 heroNode.run(.move(by: .init(dx: 0, dy: 64), duration: 0.2))
                 dashSound()
@@ -379,7 +379,7 @@ class GameScene: SKScene {
 
             case .down:
                 let newPosition = CGPoint(x: heroNode.position.x, y: heroNode.position.y - 64)
-                if onLand(characterPosition: newPosition, map: rockMap) == false { return }
+                if (onLand(characterPosition: newPosition, map: rockMap) == false){return}
                 heroNode.run(.move(by: .init(dx: 0, dy: -64), duration: 0.2))
                 heroRunDown()
                 dashSound()
@@ -399,11 +399,25 @@ class GameScene: SKScene {
     func onLand(characterPosition: CGPoint, map: SKTileMapNode) -> Bool {
         let column = map.tileColumnIndex(fromPosition: characterPosition)
         let row = map.tileRowIndex(fromPosition: characterPosition)
+        var counter = false
         
-        if map.tileDefinition(atColumn: column, row: row)?.name != walkableTiles[0] && map.tileDefinition(atColumn: column, row: row)?.name != walkableTiles[1]   { return false }
-        else { return true }
-        
+        for i in walkableTiles.indices {
+            if map.tileDefinition(atColumn: column, row: row)?.name != walkableTiles[i]   {
+               
+            } else { counter = true }
+        }
+        print(counter)
+        return counter
     }
+    
+//    func onLand(characterPosition: CGPoint, map: SKTileMapNode) -> Bool {
+//        let column = map.tileColumnIndex(fromPosition: characterPosition)
+//        let row = map.tileRowIndex(fromPosition: characterPosition)
+//
+//        if map.tileDefinition(atColumn: column, row: row)?.name != walkableTiles[0] && map.tileDefinition(atColumn: column, row: row)?.name != walkableTiles[1]   { return false }
+//        else { return true }
+//
+//    }
     
     func doorSpawn(characterPosition: CGPoint, map: SKTileMapNode) {
 //        if map.tileSet.name ==  {
