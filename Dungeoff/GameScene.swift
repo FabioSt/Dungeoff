@@ -59,6 +59,11 @@ class GameScene: SKScene {
     override func update(_ currentTime: CFTimeInterval)
     {
         /* Called before each frame is rendered */
+        
+        let lifeBarPosition = CGPoint(x: skeletonNode.position.x, y: skeletonNode.position.y + skeletonNode.size.height)
+        lifeBar.position = lifeBarPosition
+        
+        
         camera!.position = heroNode.position
         checkPositions()
         label.text = "\(coinCounter)"
@@ -226,7 +231,7 @@ class GameScene: SKScene {
         let barSize = CGSize(width: skeletonNode.size.width, height: skeletonNode.size.height/5)
         lifeBar = SKSpriteNode(color: #colorLiteral(red: 0.5843137503, green: 0.8235294223, blue: 0.4196078479, alpha: 1), size: barSize)
         
-        var lifeBarPosition = CGPoint(x: skeletonNode.position.x, y: skeletonNode.position.y + skeletonNode.size.height)
+        let lifeBarPosition = CGPoint(x: skeletonNode.position.x, y: skeletonNode.position.y + skeletonNode.size.height)
         lifeBar.position = lifeBarPosition
         self.addChild(lifeBar)
         

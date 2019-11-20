@@ -27,6 +27,7 @@ func hitSound() {
 
 func slashSound() {
     if let soundURL = Bundle.main.url(forResource: "Slash", withExtension: "mp3") {
+//        by Mike Koenig
         var mySound: SystemSoundID = 0
         AudioServicesCreateSystemSoundID(soundURL as CFURL, &mySound)
         AudioServicesPlaySystemSound(mySound);
