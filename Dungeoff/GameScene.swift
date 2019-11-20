@@ -97,8 +97,6 @@ class GameScene: SKScene {
             restart?.scaleMode = SKSceneScaleMode.aspectFit
             restart?.size = (view?.frame.size)!
             view?.presentScene(restart!)
-            heroNode.position = rockMap.centerOfTile(atColumn: rockMap.numberOfRows/2 , row: rockMap.numberOfColumns/2)
-//            heroSpawn()
         }
     }
     
