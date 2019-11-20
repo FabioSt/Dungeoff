@@ -63,13 +63,42 @@ class GameScene: SKScene {
         checkPositions()
         label.text = "\(coinCounter)"
         if lifeBar.size.width == .zero {
-        lifeBar.removeFromParent()
+            lifeBar.removeFromParent()
             skeletonNode.run(.fadeAlpha(to: 0, duration: 0.3))
         }
         
         if tutorialCounter == 4 {
             hintLabel.text = hints[3]
         }
+    }
+    
+    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+        
+        if let location = touches.first?.location(in: self) {
+            nodeTapped(node: self.atPoint(location))
+        }
+    }
+    
+    func nodeTapped(node : SKNode) {
+        if node === self.skeletonNode {
+            if isInRange(protagoNode: heroNode, enemyNode: skeletonNode) {
+                checkHP()
+                slashSound()
+            }
+        }
+    }
+    
+    func isInRange(protagoNode: SKNode, enemyNode: SKNode) -> Bool {
+        let heroX = protagoNode.position.x
+        let heroY = protagoNode.position.y
+        
+        let enemyX = enemyNode.position.x
+        let enemyY = enemyNode.position.y
+        
+        let xDistance = abs(heroX - enemyX)
+        let yDistance = abs(heroY - enemyY)
+        
+        return xDistance < 2 * rockMap.tileSize.width || yDistance < 2 * rockMap.tileSize.height
     }
     
     func checkHP(){
@@ -87,6 +116,7 @@ class GameScene: SKScene {
 //        lifeBar.size = newSize
         print("\(hitCounter/skeletonHP)")
         lifeBar.run(.resize(toWidth: newSize.width, duration: 0.4))
+        if hitCounter == skeletonHP {  }
     }
     
     func heroRun() {
@@ -437,7 +467,7 @@ class GameScene: SKScene {
         skeletonSpawn()
         hearts()
         tutorial()
-        darkRoom()
+//        darkRoom()
 
        let pinchGesture = UIPinchGestureRecognizer(target: self, action: #selector(handlePinchFrom))
               view.addGestureRecognizer(pinchGesture)

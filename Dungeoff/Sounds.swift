@@ -25,6 +25,14 @@ func hitSound() {
        }
    }
 
+func slashSound() {
+    if let soundURL = Bundle.main.url(forResource: "Slash", withExtension: "mp3") {
+        var mySound: SystemSoundID = 0
+        AudioServicesCreateSystemSoundID(soundURL as CFURL, &mySound)
+        AudioServicesPlaySystemSound(mySound);
+    }
+}
+
 func menuMusic(father: SKNode) {
     var backgroundMusic: SKAudioNode!
             if let musicURL = Bundle.main.url(forResource: "opening", withExtension: "mp3") {
