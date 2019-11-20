@@ -34,7 +34,7 @@ class GameScene: SKScene {
     let skeletonNode = SKSpriteNode(imageNamed: "skeleton1")
     var lifeBar = SKSpriteNode(texture: nil)
     let cameraNode = SKCameraNode()
-    let coinNode = SKSpriteNode(imageNamed: "coin")
+    let coinNode = SKSpriteNode(imageNamed: "soul2")
     let heroNode: Character = Character.init()
     let mapImage = UIImageView(frame: UIScreen.main.bounds)
         
@@ -152,7 +152,6 @@ class GameScene: SKScene {
         hintLabel.text = hints[2]
         camera!.addChild(hintLabel)
         
-        
     }
     
     func heroRunUp() {
@@ -194,7 +193,6 @@ class GameScene: SKScene {
          let herof1 = SKTexture.init(imageNamed: "hero-idle2")
          let herof2 = SKTexture.init(imageNamed: "hero-idle3")
          let heroFrames: [SKTexture] = [herof0, herof1, herof2]
-        
         
          herof0.filteringMode = .nearest
          herof1.filteringMode = .nearest
@@ -250,12 +248,12 @@ class GameScene: SKScene {
     func coinSpawn(){
         
         coinNode.position = CGPoint(x: -170, y: 370)
-         coinNode.size = CGSize(width: 32, height: 32)
-         coinNode.texture?.filteringMode = .nearest
+        coinNode.size = CGSize(width: 40, height: 40)
+        coinNode.texture?.filteringMode = .nearest
         coinNode.zPosition = 99
         
 
-       label.position = CGPoint(x: -145, y: 357)
+       label.position = CGPoint(x: -140, y: 357)
         label.horizontalAlignmentMode = .left
        label.fontColor = SKColor.white
        label.fontSize = 55
@@ -396,8 +394,12 @@ class GameScene: SKScene {
         if map.tileDefinition(atColumn: column, row: row)?.name != walkableTiles[0] && map.tileDefinition(atColumn: column, row: row)?.name != walkableTiles[1]   { return false }
         else { return true }
         
-        
-
+    }
+    
+    func doorSpawn(characterPosition: CGPoint, map: SKTileMapNode) {
+//        if map.tileSet.name ==  {
+            
+//        }
     }
     
     func comparePositionRound(position1: CGPoint, position2: CGPoint) -> Bool {
@@ -410,6 +412,13 @@ class GameScene: SKScene {
     }
     
     func darkRoom(){
+//        let lightNode = SKLightNode()
+//        lightNode.position = CGPoint(x: frame.midX, y: frame.midY)
+//        lightNode.categoryBitMask = 0b0001
+//        lightNode.lightColor = .black
+//        lightNode.zPosition = 1
+//        self.addChild(lightNode)
+//
         let rect = SKSpriteNode(imageNamed: "black.png")
         rect.position = CGPoint(x: frame.midX, y: frame.midY)
         rect.zPosition = 1
