@@ -37,7 +37,7 @@ class GameScene: SKScene {
     let coinNode = SKSpriteNode(imageNamed: "coin")
     let heroNode: Character = Character.init()
     let mapImage = UIImageView(frame: UIScreen.main.bounds)
-    
+        
     let walkableTiles = ["B2", "B3", "A2"]
     
     func checkPositions() {
@@ -112,6 +112,7 @@ class GameScene: SKScene {
         hintLabel.fontColor = SKColor.white
         hintLabel.horizontalAlignmentMode = .center
         hintLabel.verticalAlignmentMode = .center
+        hintLabel.zPosition = 99
         hintLabel.position = CGPoint(x: 0, y: -350)
         hintLabel.text = hints[2]
         camera!.addChild(hintLabel)
@@ -216,12 +217,14 @@ class GameScene: SKScene {
         coinNode.position = CGPoint(x: -170, y: 370)
          coinNode.size = CGSize(width: 32, height: 32)
          coinNode.texture?.filteringMode = .nearest
-        coinNode.zPosition = 1000
+        coinNode.zPosition = 99
+        
 
        label.position = CGPoint(x: -145, y: 357)
         label.horizontalAlignmentMode = .left
        label.fontColor = SKColor.white
        label.fontSize = 55
+        label.zPosition = 99
        
          camera!.addChild(label)
          camera!.addChild(coinNode)
@@ -232,6 +235,7 @@ class GameScene: SKScene {
     func hearts() {
             heartContainers.size = CGSize(width: 118, height: 30)
            heartContainers.position = CGPoint(x: -134, y: 325)
+        heartContainers.zPosition = 99
         camera!.addChild(heartContainers)
        }
     
@@ -370,11 +374,21 @@ class GameScene: SKScene {
         }
     }
     
+    func darkRoom(){
+        let rect = SKSpriteNode(imageNamed: "black.png")
+        rect.position = CGPoint(x: frame.midX, y: frame.midY)
+        rect.zPosition = 1
+        rect.anchorPoint = CGPoint(x:0.5, y:0.5)
+            rect.alpha = 0.9
+           self.addChild(rect)
+       }
+    
     func addMap() {
         mapImage.image = UIImage(named: "map")
         mapImage.contentMode = UIView.ContentMode.scaleAspectFill
         self.view?.insertSubview(mapImage, at: 0)
     }
+    
     
     func gameOver() {
         removeAllChildren()
@@ -423,6 +437,7 @@ class GameScene: SKScene {
         skeletonSpawn()
         hearts()
         tutorial()
+        darkRoom()
 
        let pinchGesture = UIPinchGestureRecognizer(target: self, action: #selector(handlePinchFrom))
               view.addGestureRecognizer(pinchGesture)

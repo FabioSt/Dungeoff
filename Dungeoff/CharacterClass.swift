@@ -13,7 +13,7 @@ class Character: SKSpriteNode {
 //        init() {
             
             let hero = SKSpriteNode(imageNamed: "hero-idle1")
-            var health: Int = 13
+            var health: Int = 3
             var died = false
 //        }
     
