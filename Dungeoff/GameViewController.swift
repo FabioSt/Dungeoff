@@ -17,7 +17,6 @@ class GameViewController: UIViewController {
         skView.presentScene(scene)
         
     }
-    
     override var prefersStatusBarHidden: Bool {
     return true
     }

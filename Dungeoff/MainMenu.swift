@@ -32,7 +32,7 @@ class MenuScene: SKScene {
 
         // set size, color, position and text of the tapStartLabel
         tapStartLabel.fontSize = 32
-        tapStartLabel.fontColor = SKColor.white
+        tapStartLabel.fontColor = .white
         tapStartLabel.horizontalAlignmentMode = .center
         tapStartLabel.verticalAlignmentMode = .center
         tapStartLabel.position = CGPoint(
@@ -45,7 +45,6 @@ class MenuScene: SKScene {
         // add the label to the scene
         addChild(tapStartLabel)
     }
-    
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         let gameScene = GameScene(fileNamed: "Map")
