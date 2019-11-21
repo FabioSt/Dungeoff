@@ -14,6 +14,7 @@ class Character: SKSpriteNode {
             
             let hero = SKSpriteNode(imageNamed: "hero-idle1")
             var health: Int = 3
+            var maxHealth: Int = 3
             var died = false
 //        }
     

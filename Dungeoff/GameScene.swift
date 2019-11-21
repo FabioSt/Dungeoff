@@ -7,6 +7,7 @@
 
 import AVFoundation
 import SpriteKit
+import CoreMotion
 
 // Grid Stuff
 var rockMap : SKTileMapNode = SKTileMapNode()
@@ -21,12 +22,11 @@ var hintLabel: SKLabelNode = SKLabelNode()
 let hints: Array<String> = ["Shake to earn some coin", "Great, you can buy a torch!", "Swipe to Move", "Great"]
 var tutorialCounter :Int = 0
 
-var skeletonHP = CGFloat(6)
+let skeletonHP = CGFloat(6)
 var hitCounter = CGFloat(0)
 
 let lightNode = SKLightNode()
 
-var heartContainers = SKSpriteNode(imageNamed: "3of3")
 var cont = 0 // counter for BUMP action
 var coinCounter:Int = 0
 
@@ -39,6 +39,9 @@ class GameScene: SKScene {
     let heroNode: Character = Character.init()
     let mapImage = UIImageView(frame: UIScreen.main.bounds)
     let overImage = SKSpriteNode(imageNamed: "gameOver")
+    var shop = SKSpriteNode()
+    let motion = CMMotionManager()
+    var timer = Timer()
     
     let walkableTiles = ["A1", "A2", "A3", "B1", "B2", "B3","C1","C2","C3"]
     
@@ -102,25 +105,42 @@ class GameScene: SKScene {
             //            heroSpawn()
         }
         if node === self.heroNode {
-            //            lightNode.run(.falloff(to: 1, duration: 0.2))
+            lightNode.run(.falloff(to: 1, duration: 0.2))
             lightNode.falloff = 1
             lightNode.lightColor = #colorLiteral(red: 0.7681630254, green: 0.9664419293, blue: 1, alpha: 1)
         }
     }
     
-    //    func changeLight(lightNode: SKLightNode) -> SKAction {
-    //        return SKAction.run {
-    //
-    //            // 3. add the node to the scene
-    //            self.addChild(node)
-    //
-    //            // 4. after a delay go to point one
-    //            let wait = SKAction.waitForDuration(3)
-    //            let move = SKAction.moveTo(CGPoint(x: 500, y: 0), duration: 1)
-    //            let sequence = SKAction.sequence([wait, move])
-    //            node.runAction(sequence)
-    //        }
-    //    }
+    func buyLights() {
+        
+        let columns = [16, 12]
+        let rows = [19, 19]
+        
+        for i in 0 ... columns.count-1  {
+            let torchNode = SKSpriteNode(imageNamed: "torch00")
+            let torch0 = SKTexture.init(imageNamed: "torch00")
+            let torch1 = SKTexture.init(imageNamed: "torch01")
+            let torch2 = SKTexture.init(imageNamed: "torch02")
+            let torch3 = SKTexture.init(imageNamed: "torch03")
+            let torchFrames: [SKTexture] = [torch0, torch1, torch2, torch3]
+            torch0.filteringMode = .nearest
+            torch1.filteringMode = .nearest
+            torch2.filteringMode = .nearest
+            torch3.filteringMode = .nearest
+            
+            // Load the first frame as initialization
+            torchNode.position = rockMap.centerOfTile(atColumn: columns[i], row: rows[i])
+            torchNode.size = CGSize(width: 64, height: 64)
+            torchNode.texture?.filteringMode = .nearest
+            torchNode.lightingBitMask = 0b0001
+            
+            // Change the frame per 0.2 sec
+            let animation = SKAction.animate(with: torchFrames, timePerFrame: 0.2)
+            torchNode.run(SKAction.repeatForever(animation))
+            self.addChild(torchNode)
+        }
+        lightNode.isEnabled = false
+    }
     
     func isInRange(protagoNode: SKNode, enemyNode: SKNode) -> Bool {
         let heroX = protagoNode.position.x
@@ -269,7 +289,7 @@ class GameScene: SKScene {
         skeletonNode.run(SKAction.repeatForever(animation))
         self.addChild(skeletonNode)
         
-//        let move1 = SKAction.move(to: (rockMap.centerOfTile(atColumn: 13, row: 13)), duration: 0.2)
+        //        let move1 = SKAction.move(to: (rockMap.centerOfTile(atColumn: 13, row: 13)), duration: 0.2)
         let waitAction = SKAction.wait(forDuration: 1.5)
         skeletonNode.run(SKAction.repeatForever(SKAction.sequence([chaseHero(hunterNode: skeletonNode, huntedNode: heroNode),waitAction])))
         
@@ -320,13 +340,32 @@ class GameScene: SKScene {
         
     }
     
-    
-    func hearts() {
-        heartContainers.size = CGSize(width: 118, height: 30)
-        heartContainers.position = CGPoint(x: -134, y: 325)
-        heartContainers.zPosition = 99
-        camera!.addChild(heartContainers)
+    func hearts(health:Int) {
+        
+        let i:Int = health
+        var positionAdd:CGFloat = 10.0
+        for _ in 0 ... i-1 {
+            let heartContainers = SKSpriteNode(imageNamed: "heart-empty")
+            heartContainers.size = CGSize(width: 30, height: 30)
+            heartContainers.position = CGPoint(x: -180 + positionAdd, y: 325)
+            positionAdd += 40.0
+            camera!.addChild(heartContainers)
+        }
     }
+    
+    func heartsDamages(health:Int) {
+        
+        let i:Int = health
+        var positionAdd:CGFloat = 10.0
+        for _ in 0 ... i-1 {
+            let fullHearts = SKSpriteNode(imageNamed: "heart-full")
+            fullHearts.size = CGSize(width: 30, height: 30)
+            fullHearts.position = CGPoint(x: -180 + positionAdd, y: 325)
+            positionAdd += 40.0
+            camera!.addChild(fullHearts)
+        }
+    }
+    
     
     func attack(targetPosition: CGPoint) {
         let newPosition = CGPoint.init(x: (Int.random(in: -3...3)*Int(rockMap.tileSize.width)) + Int(targetPosition.x), y: (Int.random(in: -6...6) * Int(rockMap.tileSize.height)) + Int(targetPosition.y))
@@ -337,15 +376,7 @@ class GameScene: SKScene {
         skeletonNode.position = rockMap.centerOfTile(atColumn: column, row: row)
     }
     
-    func heartsDown() {
-        if (heroNode.health == 3) {
-            heartContainers.texture = SKTexture(imageNamed: "3of3")
-        } else if (heroNode.health == 2) {
-            heartContainers.texture = SKTexture(imageNamed: "2of3")
-        } else if (heroNode.health == 1) {
-            heartContainers.texture = SKTexture(imageNamed: "1of3")
-        }
-    }
+    
     
     func bump(node: SKNode, arrivingDirection: CGVector) {
         cont += 1
@@ -355,7 +386,7 @@ class GameScene: SKScene {
             //        node.run(.move(to: bounceDestination, duration: 0.1))
             node.run(.moveBy(x: bounceDestination.x, y: bounceDestination.y, duration: 0.1))
             heroNode.health -= 1
-            heartsDown()
+            heartsDamages(health: heroNode.health)
             hitSound()
             heroNode.die()
             print(heroNode.health)
@@ -413,10 +444,9 @@ class GameScene: SKScene {
             let newPosition = CGPoint(x: heroNode.position.x, y: heroNode.position.y + 64)
             if (onLand(characterPosition: newPosition, map: rockMap) == false){return}
             heroRunUp()
+            buyLights()
             heroNode.run(.move(by: .init(dx: 0, dy: 64), duration: 0.2))
             dashSound()
-            //                heroNode.zRotation = 3.14 / 2
-            //                heroNode.position = rockMap.centerOfTile(atColumn: currentColumn, row: currentRow + 1)
             currentRow += 1
             tutorialCounter+=1
             moveVector = .init(dx: 0, dy: 64)
@@ -430,7 +460,6 @@ class GameScene: SKScene {
             heroNode.run(.move(by: .init(dx: 0, dy: -64), duration: 0.2))
             heroRunDown()
             dashSound()
-            //                heroNode.position = rockMap.centerOfTile(atColumn: currentColumn , row: currentRow - 1)
             currentRow -= 1
             tutorialCounter+=1
             moveVector = .init(dx: 0, dy: -64)
@@ -457,14 +486,6 @@ class GameScene: SKScene {
         return counter
     }
     
-    //    func onLand(characterPosition: CGPoint, map: SKTileMapNode) -> Bool {
-    //        let column = map.tileColumnIndex(fromPosition: characterPosition)
-    //        let row = map.tileRowIndex(fromPosition: characterPosition)
-    //
-    //        if map.tileDefinition(atColumn: column, row: row)?.name != walkableTiles[0] && map.tileDefinition(atColumn: column, row: row)?.name != walkableTiles[1]   { return false }
-    //        else { return true }
-    //
-    //    }
     
     func doorSpawn(characterPosition: CGPoint, map: SKTileMapNode) {
         //        if map.tileSet.name ==  {
@@ -479,22 +500,6 @@ class GameScene: SKScene {
         else {
             return false
         }
-    }
-    
-    func darkRoom(){
-        //        let lightNode = SKLightNode()
-        //        lightNode.position = CGPoint(x: frame.midX, y: frame.midY)
-        //        lightNode.categoryBitMask = 0b0001
-        //        lightNode.lightColor = .black
-        //        lightNode.zPosition = 1
-        //        self.addChild(lightNode)
-        //
-        let rect = SKSpriteNode(imageNamed: "black.png")
-        rect.position = CGPoint(x: frame.midX, y: frame.midY)
-        rect.zPosition = 1
-        rect.anchorPoint = CGPoint(x:0.5, y:0.5)
-        rect.alpha = 0.9
-        self.addChild(rect)
     }
     
     func addMap() {
@@ -553,12 +558,13 @@ class GameScene: SKScene {
         
         self.addChild(lightNode)
         
+        startAccelerometers()
         heroSpawn()
         coinSpawn()
         skeletonSpawn()
-        hearts()
+        hearts(health: heroNode.maxHealth)
+        heartsDamages(health: 3)
         tutorial()
-        //        darkRoom()
         
         let pinchGesture = UIPinchGestureRecognizer(target: self, action: #selector(handlePinchFrom))
         view.addGestureRecognizer(pinchGesture)
@@ -579,5 +585,51 @@ class GameScene: SKScene {
             camera!.setScale(1.5)
         }
     }
+    
+    func startAccelerometers() {
+        // Make sure the accelerometer hardware is available.
+        if self.motion.isAccelerometerAvailable {
+            self.motion.accelerometerUpdateInterval = 1.0 / 60.0  // 60 Hz
+            self.motion.startAccelerometerUpdates()
+            
+            // Configure a timer to fetch the data.
+            self.timer = Timer(fire: Date(), interval: (8.0/60.0), /*change the value here to change the coin aquision speed*/
+                               repeats: true, block: { (timer) in
+                                // Get the accelerometer data.
+                                if let data = self.motion.accelerometerData {
+                                    let x = data.acceleration.x
+                                    let y = data.acceleration.y
+                                    let z = data.acceleration.z
+                                    // Use the accelerometer data in your app.
+                                    if abs(x)>1.1 || abs(y)>1.1 || abs(z)>1.1 { self.eventCoin() }
+                                    //                self.timer.timeInterval = 1.0 / x
+                                    
+                                }
+            })
+            
+            // Add the timer to the current run loop.
+            RunLoop.current.add(timer, forMode: .default)
+        }
+    }
+    
+    func eventCoin() {
+        coinCounter += 1
+        label.text = "\(coinCounter)"
+        jumpingCoin(node: coinNode)
+        if coinCounter % 100 == 0 {
+            run(.playSoundFileNamed("smb_1-up.wav", waitForCompletion: false))
+        } else {
+            run(.playSoundFileNamed("smb_coin.wav", waitForCompletion: false))
+        }
+        
+        if coinCounter == 10 {
+            shop.run(.fadeAlpha(to: 1, duration: 2.5))
+        }
+    }
+    
+    func jumpingCoin(node: SKNode) {
+        node.run(SKAction.sequence([.moveBy(x: 0, y: 30, duration: 0.18), .moveBy(x: 0, y: -30, duration: 0.12), .moveBy(x: 0, y: 10, duration: 0.066), .moveBy(x: 0, y: -10, duration: 0.1)]))
+    }
+
 }
 
