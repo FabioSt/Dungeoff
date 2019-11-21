@@ -26,7 +26,6 @@ var hitCounter = CGFloat(0)
 
 let lightNode = SKLightNode()
 
-var heartContainers = SKSpriteNode(imageNamed: "3of3")
 var cont = 0 // counter for BUMP action
 var coinCounter:Int = 0
 
@@ -325,13 +324,25 @@ class GameScene: SKScene {
         
     }
     
+    func hearts(health:Int) {
     
-    func hearts() {
-        heartContainers.size = CGSize(width: 118, height: 30)
-        heartContainers.position = CGPoint(x: -134, y: 325)
-        heartContainers.zPosition = 99
-        camera!.addChild(heartContainers)
+        let i:Int = health
+        var positionAdd:CGFloat = 10.0
+        for _ in 0 ... i-1 {
+            let heartContainers = SKSpriteNode(imageNamed: "heart-empty")
+            heartContainers.size = CGSize(width: 30, height: 30)
+            heartContainers.position = CGPoint(x: -180 + positionAdd, y: 325)
+            positionAdd += 40.0
+            camera!.addChild(heartContainers)
+        }
     }
+    
+    func heartsDamages(health:Int) {
+           let i:Int = health
+           var positionAdd:CGFloat = 10.0
+        
+       }
+   
     
     func attack(targetPosition: CGPoint) {
         let newPosition = CGPoint.init(x: (Int.random(in: -3...3)*Int(rockMap.tileSize.width)) + Int(targetPosition.x), y: (Int.random(in: -6...6) * Int(rockMap.tileSize.height)) + Int(targetPosition.y))
@@ -342,15 +353,7 @@ class GameScene: SKScene {
         skeletonNode.position = rockMap.centerOfTile(atColumn: column, row: row)
     }
     
-    func heartsDown() {
-        if (heroNode.health == 3) {
-            heartContainers.texture = SKTexture(imageNamed: "3of3")
-        } else if (heroNode.health == 2) {
-            heartContainers.texture = SKTexture(imageNamed: "2of3")
-        } else if (heroNode.health == 1) {
-            heartContainers.texture = SKTexture(imageNamed: "1of3")
-        }
-    }
+   
     
     func bump(node: SKNode, arrivingDirection: CGVector) {
         cont += 1
@@ -360,7 +363,7 @@ class GameScene: SKScene {
             //        node.run(.move(to: bounceDestination, duration: 0.1))
             node.run(.moveBy(x: bounceDestination.x, y: bounceDestination.y, duration: 0.1))
             heroNode.health -= 1
-            heartsDown()
+            heartsDamages(health: heroNode.health)
             hitSound()
             heroNode.die()
             print(heroNode.health)
@@ -420,8 +423,6 @@ class GameScene: SKScene {
             heroRunUp()
             heroNode.run(.move(by: .init(dx: 0, dy: 64), duration: 0.2))
             dashSound()
-            //                heroNode.zRotation = 3.14 / 2
-            //                heroNode.position = rockMap.centerOfTile(atColumn: currentColumn, row: currentRow + 1)
             currentRow += 1
             tutorialCounter+=1
             moveVector = .init(dx: 0, dy: 64)
@@ -435,7 +436,6 @@ class GameScene: SKScene {
             heroNode.run(.move(by: .init(dx: 0, dy: -64), duration: 0.2))
             heroRunDown()
             dashSound()
-            //                heroNode.position = rockMap.centerOfTile(atColumn: currentColumn , row: currentRow - 1)
             currentRow -= 1
             tutorialCounter+=1
             moveVector = .init(dx: 0, dy: -64)
@@ -462,14 +462,6 @@ class GameScene: SKScene {
         return counter
     }
     
-    //    func onLand(characterPosition: CGPoint, map: SKTileMapNode) -> Bool {
-    //        let column = map.tileColumnIndex(fromPosition: characterPosition)
-    //        let row = map.tileRowIndex(fromPosition: characterPosition)
-    //
-    //        if map.tileDefinition(atColumn: column, row: row)?.name != walkableTiles[0] && map.tileDefinition(atColumn: column, row: row)?.name != walkableTiles[1]   { return false }
-    //        else { return true }
-    //
-    //    }
     
     func doorSpawn(characterPosition: CGPoint, map: SKTileMapNode) {
         //        if map.tileSet.name ==  {
@@ -560,7 +552,8 @@ class GameScene: SKScene {
         heroSpawn()
         coinSpawn()
         skeletonSpawn()
-        hearts()
+        hearts(health: heroNode.maxHealth)
+        heartsDamages(health: 3)
         tutorial()
         //        darkRoom()
         
