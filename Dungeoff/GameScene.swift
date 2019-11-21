@@ -21,7 +21,7 @@ var hintLabel: SKLabelNode = SKLabelNode()
 let hints: Array<String> = ["Shake to earn some coin", "Great, you can buy a torch!", "Swipe to Move", "Great"]
 var tutorialCounter :Int = 0
 
-let skeletonHP = CGFloat(6)
+var skeletonHP = CGFloat(6)
 var hitCounter = CGFloat(0)
 
 let lightNode = SKLightNode()
@@ -35,7 +35,6 @@ class GameScene: SKScene {
     var label = SKLabelNode(fontNamed: "Savior4")
     let skeletonNode = SKSpriteNode(imageNamed: "skeleton1")
     var lifeBar = SKSpriteNode(texture: nil)
-    let cameraNode = SKCameraNode()
     let coinNode = SKSpriteNode(imageNamed: "soul2")
     let heroNode: Character = Character.init()
     let mapImage = UIImageView(frame: UIScreen.main.bounds)
@@ -72,10 +71,6 @@ class GameScene: SKScene {
         camera?.position = heroNode.position
         checkPositions()
         label.text = "\(coinCounter)"
-        if lifeBar.size.width == .zero {
-            lifeBar.removeFromParent()
-            skeletonNode.run(.fadeAlpha(to: 0, duration: 0.15))
-        }
         
         if skeletonNode.alpha == 0 { skeletonNode.removeFromParent() }
         
@@ -513,6 +508,7 @@ class GameScene: SKScene {
         removeAllChildren()
         removeAllActions()
         
+        hitCounter = CGFloat(-1)
         overImage.size = CGSize(width: 320, height: 320)
         addChild(overImage)
         view?.scene?.isPaused = false
