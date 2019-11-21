@@ -353,18 +353,18 @@ class GameScene: SKScene {
         }
     }
     
-//    func heartsDamages(health:Int) {
-//
-//        let i:Int = health
-//        var positionAdd:CGFloat = 10.0
-//        for _ in 0 ... i-1 {
-//            let fullHearts = SKSpriteNode(imageNamed: "heart-full")
-//            fullHearts.size = CGSize(width: 30, height: 30)
-//            fullHearts.position = CGPoint(x: -180 + positionAdd, y: 325)
-//            positionAdd += 40.0
-//            camera!.addChild(fullHearts)
-//        }
-//    }
+    func heartsDamages(health:Int) {
+
+        let i:Int = health
+        var positionAdd:CGFloat = 10.0
+        for _ in 0 ... i-1 {
+            let fullHearts = SKSpriteNode(imageNamed: "heart-full")
+            fullHearts.size = CGSize(width: 30, height: 30)
+            fullHearts.position = CGPoint(x: -180 + positionAdd, y: 325)
+            positionAdd += 40.0
+            camera!.addChild(fullHearts)
+        }
+    }
     
     
     func attack(targetPosition: CGPoint) {
@@ -563,7 +563,7 @@ class GameScene: SKScene {
         coinSpawn()
         skeletonSpawn()
         hearts(health: heroNode.maxHealth)
-//        heartsDamages(health: 3)
+        heartsDamages(health: 3)
         tutorial()
         
         let pinchGesture = UIPinchGestureRecognizer(target: self, action: #selector(handlePinchFrom))
