@@ -106,10 +106,41 @@ class GameScene: SKScene {
             //            heroSpawn()
         }
         if node === self.heroNode {
-            //            lightNode.run(.falloff(to: 1, duration: 0.2))
+                        lightNode.run(.falloff(to: 1, duration: 0.2))
             lightNode.falloff = 1
             lightNode.lightColor = #colorLiteral(red: 0.7681630254, green: 0.9664419293, blue: 1, alpha: 1)
         }
+    }
+    
+    func buyLights() {
+        
+        let columns = [16, 12]
+        let rows = [19, 19]
+        
+        for i in 0 ... columns.count-1  {
+        let torchNode = SKSpriteNode(imageNamed: "torch00")
+        let torch0 = SKTexture.init(imageNamed: "torch00")
+        let torch1 = SKTexture.init(imageNamed: "torch01")
+        let torch2 = SKTexture.init(imageNamed: "torch02")
+        let torch3 = SKTexture.init(imageNamed: "torch03")
+        let torchFrames: [SKTexture] = [torch0, torch1, torch2, torch3]
+        torch0.filteringMode = .nearest
+        torch1.filteringMode = .nearest
+        torch2.filteringMode = .nearest
+        torch3.filteringMode = .nearest
+        
+        // Load the first frame as initialization
+        torchNode.position = rockMap.centerOfTile(atColumn: columns[i], row: rows[i])
+        torchNode.size = CGSize(width: 64, height: 64)
+        torchNode.texture?.filteringMode = .nearest
+        torchNode.lightingBitMask = 0b0001
+        
+        // Change the frame per 0.2 sec
+               let animation = SKAction.animate(with: torchFrames, timePerFrame: 0.2)
+               torchNode.run(SKAction.repeatForever(animation))
+               self.addChild(torchNode)
+        }
+        lightNode.isEnabled = false
     }
     
     //    func changeLight(lightNode: SKLightNode) -> SKAction {
@@ -338,9 +369,16 @@ class GameScene: SKScene {
     }
     
     func heartsDamages(health:Int) {
+           
            let i:Int = health
            var positionAdd:CGFloat = 10.0
-        
+            for _ in 0 ... i-1 {
+                let fullHearts = SKSpriteNode(imageNamed: "heart-full")
+                fullHearts.size = CGSize(width: 30, height: 30)
+                fullHearts.position = CGPoint(x: -180 + positionAdd, y: 325)
+                positionAdd += 40.0
+                camera!.addChild(fullHearts)
+            }
        }
    
     
@@ -421,6 +459,7 @@ class GameScene: SKScene {
             let newPosition = CGPoint(x: heroNode.position.x, y: heroNode.position.y + 64)
             if (onLand(characterPosition: newPosition, map: rockMap) == false){return}
             heroRunUp()
+            buyLights()
             heroNode.run(.move(by: .init(dx: 0, dy: 64), duration: 0.2))
             dashSound()
             currentRow += 1
