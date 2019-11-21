@@ -517,22 +517,6 @@ class GameScene: SKScene {
         }
     }
     
-    func darkRoom(){
-        //        let lightNode = SKLightNode()
-        //        lightNode.position = CGPoint(x: frame.midX, y: frame.midY)
-        //        lightNode.categoryBitMask = 0b0001
-        //        lightNode.lightColor = .black
-        //        lightNode.zPosition = 1
-        //        self.addChild(lightNode)
-        //
-        let rect = SKSpriteNode(imageNamed: "black.png")
-        rect.position = CGPoint(x: frame.midX, y: frame.midY)
-        rect.zPosition = 1
-        rect.anchorPoint = CGPoint(x:0.5, y:0.5)
-        rect.alpha = 0.9
-        self.addChild(rect)
-    }
-    
     func addMap() {
         mapImage.image = UIImage(named: "map")
         mapImage.contentMode = UIView.ContentMode.scaleAspectFill
@@ -594,7 +578,6 @@ class GameScene: SKScene {
         hearts(health: heroNode.maxHealth)
         heartsDamages(health: 3)
         tutorial()
-        //        darkRoom()
         
         let pinchGesture = UIPinchGestureRecognizer(target: self, action: #selector(handlePinchFrom))
         view.addGestureRecognizer(pinchGesture)
